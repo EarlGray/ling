@@ -90,7 +90,7 @@ int main() {
     //mt_seed(start_of_day_wall_clock);
 
     console_init();
-    //nalloc_init();
+    nalloc_init();
     //lwip_init();
 
     //-------- init phase 2 --------

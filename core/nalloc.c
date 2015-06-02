@@ -171,7 +171,8 @@ static memnode_t *nalloc_internal(int size)
 static memnode_t *split_nodes(int index)
 {
 	memnode_t *node = 0;
-	for (int i = index +1; i < MAX_INDEX; i++)
+	int i;
+	for (i = index +1; i < MAX_INDEX; i++)
 	{
 		if (node_allocator.free[i] != 0)
 		{
@@ -288,7 +289,8 @@ void nalloc_dump_stats(void)
 
 	int grand_count = 0;
 	int grand_total = 0;
-	for (int i = 0; i < MAX_INDEX; i++)
+	int i;
+	for (i = 0; i < MAX_INDEX; i++)
 	{
 		memnode_t *node = node_allocator.free[i];
 		int min_index = MAX_INT_VALUE;
