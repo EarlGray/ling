@@ -13,6 +13,8 @@
       <itemPath>../../../include/nalloc.h</itemPath>
       <itemPath>../../../include/time.h</itemPath>
       <itemPath>../../../include/mtwist.h</itemPath>
+      <itemPath>../../../include/strings.h</itemPath>
+      <itemPath>../../../include/hash.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -27,6 +29,8 @@
       <itemPath>../../../nalloc.c</itemPath>
       <itemPath>../time.c</itemPath>
       <itemPath>../../../mtwist.c</itemPath>
+      <itemPath>../../../strings.c</itemPath>
+      <itemPath>../../../hash.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

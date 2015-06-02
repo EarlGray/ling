@@ -66,6 +66,7 @@ static uint32_t digest(const unsigned char *key, int klen);
 
 hash_t *hash_make(void)
 {
+	int i;
 	memnode_t *node = nalloc(HASH_NODE_SIZE - sizeof(memnode_t));
 	if (node == 0)
 		return 0;
@@ -88,7 +89,7 @@ hash_t *hash_make(void)
 
 	ht->free = 0;
 
-	for (int i = 0; i < HASH_BUCKETS; i++)
+	for (i = 0; i < HASH_BUCKETS; i++)
 		buckets[i] = 0;
 
 	hash_entry_t *entry = (void *)(buckets + HASH_BUCKETS);
@@ -244,8 +245,9 @@ void hash_destroy(hash_t *ht)
 
 static uint32_t digest(const unsigned char *key, int klen)
 {
+	int i;
 	uint32_t hash = key[0];
-	for (int i = 1; i < klen; i++)
+	for (i = 1; i < klen; i++)
 		hash = 33 * hash + key[i];
 	return hash;
 }
