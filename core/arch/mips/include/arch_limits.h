@@ -1,0 +1,4 @@
+#ifndef __LING_MIPS_ARHC_LIMITS_H__
+#define __LING_MIPS_ARHC_LIMITS_H__
+
+#endif // __LING_MIPS_ARHC_LIMITS_H__
