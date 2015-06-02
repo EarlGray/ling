@@ -20,6 +20,7 @@
                    projectFiles="true">
       <itemPath>../console.c</itemPath>
       <itemPath>../ling.c</itemPath>
+      <itemPath>../mm.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

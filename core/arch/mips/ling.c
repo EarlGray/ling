@@ -41,7 +41,7 @@
 #include "string.h"
 #include "snprintf.h"
 
-//#include "mm.h"
+#include "mm.h"
 //#include "nalloc.h"
 
 #include "console.h"
@@ -79,50 +79,51 @@ static void spawn_init_start(char *cmd_line);
 // both domain and host name
 char my_domain_name[256];
 
-int main()
-{
-	//-------- init phase 1 --------
-	//
+int main() {
+    //-------- init phase 1 --------
+    //
 
-	//time_init();	// sets start_of_day_wall_clock
+    mm_init();
+    //time_init();	// sets start_of_day_wall_clock
 
-	// use the time value to seed PRNG
-	//mt_seed(start_of_day_wall_clock);
+    // use the time value to seed PRNG
+    //mt_seed(start_of_day_wall_clock);
 
-	console_init();
-	//nalloc_init();
-	//lwip_init();
+    console_init();
+    //nalloc_init();
+    //lwip_init();
 
-	//-------- init phase 2 --------
-	//
-	//if (nalloc_no_memory())
-	//	fatal_error("init phase 2: no memory"); 	
+    //-------- init phase 2 --------
+    //
+    //if (nalloc_no_memory())
+    //	fatal_error("init phase 2: no memory");
 
-	//sys_stats_init();
+    //sys_stats_init();
 
-	//atoms_init();
-	//embed_init();
-	//code_base_init();
-	//scheduler_init();
-	//ets_init();
-	//pcre_init();
-	//counters_init();
+    //atoms_init();
+    //embed_init();
+    //code_base_init();
+    //scheduler_init();
+    //ets_init();
+    //pcre_init();
+    //counters_init();
 
-	//print_start_info();
-	//print_xenmem_info();
-	//run_alloc_tests();
-	//run_mm_tests();
-	//print_xenstore_values();
-	//run_bignum_tests();
-	
-	printk("\r\nLing %s is here\r\n", quote_and_expand(LING_VER));
+    //print_start_info();
+    //print_xenmem_info();
+    //run_alloc_tests();
+    //run_mm_tests();
+    //print_xenstore_values();
+    //run_bignum_tests();
 
-	//proc_main(0); // preliminary run
+    printk("\r\nLing %s is here\r\n", quote_and_expand(LING_VER));
+    printk("BMXDRMSZ = 0x%x\n", BMXDRMSZ);
 
-	//static char *hardcoded_command_line = "-home /";
-	//spawn_init_start(hardcoded_command_line);
+    //proc_main(0); // preliminary run
 
-	/* UNREACHABLE */
+    //static char *hardcoded_command_line = "-home /";
+    //spawn_init_start(hardcoded_command_line);
+
+    /* UNREACHABLE */
 }
 
 void printk(const char *fmt, ...)
