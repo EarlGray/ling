@@ -84,10 +84,10 @@ int main() {
     //
 
     mm_init();
-    //time_init();	// sets start_of_day_wall_clock
+    time_init();	// sets start_of_day_wall_clock
 
     // use the time value to seed PRNG
-    //mt_seed(start_of_day_wall_clock);
+    mt_seed(start_of_day_wall_clock);
 
     console_init();
     nalloc_init();
@@ -95,8 +95,8 @@ int main() {
 
     //-------- init phase 2 --------
     //
-    //if (nalloc_no_memory())
-    //	fatal_error("init phase 2: no memory");
+    if (nalloc_no_memory())
+    	fatal_error("init phase 2: no memory");
 
     //sys_stats_init();
 
@@ -123,7 +123,9 @@ int main() {
     //static char *hardcoded_command_line = "-home /";
     //spawn_init_start(hardcoded_command_line);
 
-    /* UNREACHABLE */
+    /* (UN)REACHABLE */
+    printk("\r\nBye.\r\n");
+    for (;;);
 }
 
 void printk(const char *fmt, ...)

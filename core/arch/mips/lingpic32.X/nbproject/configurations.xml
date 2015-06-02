@@ -11,6 +11,8 @@
       <itemPath>../include/arch_console.h</itemPath>
       <itemPath>../include/ser_cons.h</itemPath>
       <itemPath>../../../include/nalloc.h</itemPath>
+      <itemPath>../../../include/time.h</itemPath>
+      <itemPath>../../../include/mtwist.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -23,6 +25,8 @@
       <itemPath>../ling.c</itemPath>
       <itemPath>../mm.c</itemPath>
       <itemPath>../../../nalloc.c</itemPath>
+      <itemPath>../time.c</itemPath>
+      <itemPath>../../../mtwist.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
