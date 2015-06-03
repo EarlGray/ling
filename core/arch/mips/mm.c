@@ -1,14 +1,12 @@
 #include "ling_common.h"
 #include "mm.h"
 
-#define GC_RESERVE (16 * 1024)
-
-#define PIC32MX_KSEG0  0xa0000000
+#define GC_RESERVE (8 * 1024)
 
 extern char _heap, _eheap;
 
-static void *free_page;
-static void *endofheap = &_eheap;
+static char *free_page;
+static char *endofheap = &_eheap;
 
 #define MEMORY_END ((uintptr_t)endofheap)
 
@@ -26,6 +24,8 @@ void *mm_alloc_pages(int nr_pages)
 		return 0;
 	void *allocated = free_page;
 	free_page += nr_pages * PAGE_SIZE;
+	printk("mm_alloc_pages(%d) -> *%08x: %d pages left, free_page=*%08x\n",
+	       nr_pages, allocated, mm_alloc_left(), (uintptr_t)free_page);
 	return allocated;
 }
 

@@ -31,8 +31,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef LIMITS_H
-#define LIMITS_H
+#ifndef __LING_LIMITS_H__
+#define __LING_LIMITS_H__
+
+#ifdef PAGE_SIZE
+# undef PAGE_SIZE
+#endif
+#ifdef PAGE_SHIFT
+# undef PAGE_SHIFT
+#endif
 
 #include "arch_limits.h"
 
@@ -41,6 +48,7 @@
 
 #define MAX_ROOT_REGS	65535
 
+#undef BUFSIZ
 #define BUFSIZ		4096
 #endif
 

@@ -102,7 +102,7 @@ int main() {
 
     //sys_stats_init();
 
-    //atoms_init();
+    atoms_init();
     //embed_init();
     //code_base_init();
     //scheduler_init();
