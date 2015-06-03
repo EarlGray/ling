@@ -50,8 +50,8 @@
 
 #include "term.h"
 //#include "bignum.h"
-//#include "atoms.h"
-//#include "atom_defs.h"
+#include "atoms.h"
+#include "atom_defs.h"
 //#include "embed.h"
 //#include "code_base.h"
 #include "proc.h"
@@ -95,8 +95,10 @@ int main() {
 
     //-------- init phase 2 --------
     //
-    if (nalloc_no_memory())
-    	fatal_error("init phase 2: no memory");
+    if (nalloc_no_memory()) {
+        nalloc_dump_stats();
+        fatal_error("init phase 2: no memory");
+    }
 
     //sys_stats_init();
 
@@ -116,7 +118,6 @@ int main() {
     //run_bignum_tests();
 
     printk("\r\nLing %s is here\r\n", quote_and_expand(LING_VER));
-    printk("BMXDRMSZ = 0x%x\n", BMXDRMSZ);
 
     //proc_main(0); // preliminary run
 
@@ -124,6 +125,7 @@ int main() {
     //spawn_init_start(hardcoded_command_line);
 
     /* (UN)REACHABLE */
+    nalloc_dump_stats();
     printk("\r\nBye.\r\n");
     for (;;);
 }

@@ -3,13 +3,21 @@
 
 #define GC_RESERVE (16 * 1024)
 
-#define PIC32MX_KSEG0  0x80000000
-#define MEMORY_END     (PIC32MX_KSEG0 - BMXDRMSZ)
+#define PIC32MX_KSEG0  0xa0000000
 
-static void *free_page = PIC32MX_KSEG0;
+extern char _heap, _eheap;
+
+static void *free_page;
+static void *endofheap = &_eheap;
+
+#define MEMORY_END ((uintptr_t)endofheap)
 
 void mm_init(void)
 {
+    uintptr_t heapstart = (uintptr_t)&_heap;
+    free_page = (void *)(heapstart + (PAGE_SIZE - 1) & ~(PAGE_SIZE - 1));
+    printk("mm_init: heap: [0x%08x : 0x%08x]\n",
+            (uintptr_t)free_page, (uintptr_t)endofheap);
 }
 
 void *mm_alloc_pages(int nr_pages)

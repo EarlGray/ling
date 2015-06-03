@@ -15,6 +15,8 @@
       <itemPath>../../../include/mtwist.h</itemPath>
       <itemPath>../../../include/strings.h</itemPath>
       <itemPath>../../../include/hash.h</itemPath>
+      <itemPath>../../../include/atom_defs.h</itemPath>
+      <itemPath>../../../include/atoms.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -31,6 +33,7 @@
       <itemPath>../../../mtwist.c</itemPath>
       <itemPath>../../../strings.c</itemPath>
       <itemPath>../../../hash.c</itemPath>
+      <itemPath>../../../atoms.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -68,8 +71,8 @@
         </loading>
       </compileType>
       <makeCustomizationType>
-        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
-        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPreStepEnabled>true</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep>./prebuild.sh</makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
@@ -118,7 +121,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="8192"/>
+        <property key="heap-size" value="0x1a600"/>
         <property key="input-libraries" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
