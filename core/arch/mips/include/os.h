@@ -9,7 +9,7 @@
 #include <xc.h>
 #endif
 
-#include <plib.h>
+//#include <plib.h>
  
 #define QUICK_SIZE 4096
 
