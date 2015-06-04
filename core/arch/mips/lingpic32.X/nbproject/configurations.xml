@@ -17,6 +17,7 @@
       <itemPath>../../../include/hash.h</itemPath>
       <itemPath>../../../include/atom_defs.h</itemPath>
       <itemPath>../../../include/atoms.h</itemPath>
+      <itemPath>../../../include/sys_stats.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -34,6 +35,7 @@
       <itemPath>../../../strings.c</itemPath>
       <itemPath>../../../hash.c</itemPath>
       <itemPath>../../../atoms.c</itemPath>
+      <itemPath>../../../sys_stats.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

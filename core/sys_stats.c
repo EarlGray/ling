@@ -46,7 +46,8 @@ static const char *sys_stats_formats[SYS_STATS_MAX];
 
 void sys_stats_init(void)
 {
-	for (int i = 0; i < SYS_STATS_MAX; i++)
+	int i;
+	for (i = 0; i < SYS_STATS_MAX; i++)
 		sys_stats_counters[i] = 0;
 
 	sys_stats_formats[SYS_STATS_REDUCTIONS] = "proc_main: %llu reductions made\n";
@@ -59,8 +60,9 @@ void sys_stats_init(void)
 
 void sys_stats_dump(void)
 {
+	int i;
 	printk("--- System statistics:\n");
-	for (int i = 0; i < SYS_STATS_MAX; i++)
+	for (i = 0; i < SYS_STATS_MAX; i++)
 		if (sys_stats_formats[i] != 0)
 			printk(sys_stats_formats[i], sys_stats_counters[i]);
 }

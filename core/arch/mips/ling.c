@@ -100,7 +100,7 @@ int main() {
         fatal_error("init phase 2: no memory");
     }
 
-    //sys_stats_init();
+    sys_stats_init();
 
     atoms_init();
     //embed_init();
