@@ -30,6 +30,14 @@
       <itemPath>../../../include/getput.h</itemPath>
       <itemPath>../../../include/heap.h</itemPath>
       <itemPath>../../../include/term_util.h</itemPath>
+      <itemPath>../../../include/msg_queue.h</itemPath>
+      <itemPath>../../../include/mixed.h</itemPath>
+      <itemPath>../../../include/crc32.h</itemPath>
+      <itemPath>../../../include/adler32.h</itemPath>
+      <itemPath>../../../include/array.h</itemPath>
+      <itemPath>../../../include/list_util.h</itemPath>
+      <itemPath>../../../include/unicode.h</itemPath>
+      <itemPath>../../../include/counters.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -59,6 +67,14 @@
       <itemPath>../../../term_util.c</itemPath>
       <itemPath>../../../bits.c</itemPath>
       <itemPath>../../../compare.c</itemPath>
+      <itemPath>../../../msg_queue.c</itemPath>
+      <itemPath>../../../mixed.c</itemPath>
+      <itemPath>../../../crc32.c</itemPath>
+      <itemPath>../../../adler32.c</itemPath>
+      <itemPath>../../../array.c</itemPath>
+      <itemPath>../../../unicode.c</itemPath>
+      <itemPath>../../../list_util.c</itemPath>
+      <itemPath>../../../counters.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

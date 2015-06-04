@@ -418,6 +418,7 @@ term_t mixed_bxor(term_t a, term_t b, heap_t *hp)
 term_t mixed_bnot(term_t a, heap_t *hp)
 {
 	assert(!is_int(a));
+    int i;
 	if (is_boxed(a) && is_bignum(peel_boxed(a)))
 	{
 		bignum_t *bn = (bignum_t *)peel_boxed(a);
@@ -426,7 +427,7 @@ term_t mixed_bnot(term_t a, heap_t *hp)
 		bignum_to_bytes(bn, buf, buf_size);
 		int is_neg = ((buf[0] & 128) == 0);
 		uint8_t carry = 1;
-		for (int i = buf_size-1; i >= 0; i--)
+		for (i = buf_size-1; i >= 0; i--)
 		{
 			buf[i] = ~buf[i];
 			if (is_neg)
@@ -445,7 +446,7 @@ term_t mixed_bnot(term_t a, heap_t *hp)
 		uint16_t *digits;
 		term_t r = heap_bignum(hp, (is_neg) ?MP_NEG :MP_ZPOS, ndigs, &digits);
 		uint8_t *p = buf + buf_size;
-		for (int i = 0; i < ndigs; i++)
+		for (i = 0; i < ndigs; i++)
 		{
 			uint16_t l, h;
 		    --p; l = *p;
@@ -509,6 +510,7 @@ static term_t bool_op_2(bignum_t *bn1, bignum_t *bn2, op_func_t op, heap_t *hp)
 static term_t bool_op_3(uint16_t *p1, int sz1, int is_neg1,
 						uint16_t *p2, int sz2, int is_neg2, op_func_t op, heap_t *hp)
 {
+	int i;
 	int rsz = (sz1 > sz2) ?sz1 :sz2;
 	int needed = WSIZE(bignum_t) + (rsz*sizeof(uint16_t) +3) /4;
 	uint32_t *p = heap_alloc(hp, needed);
@@ -557,7 +559,7 @@ static term_t bool_op_3(uint16_t *p1, int sz1, int is_neg1,
 	if (op(is_neg1, is_neg2))
 	{
 		uint32_t carry = 1;
-		for (int i = 0; i < rbn->used; i++)
+		for (i = 0; i < rbn->used; i++)
 			NEGATE_16(rbn->dp[i], carry);
 		assert(carry == 0);
 		rbn->sign = MP_NEG;
@@ -686,6 +688,7 @@ term_t mixed_bsr(term_t a, term_t b, heap_t *hp)
 static term_t bsl_1(bignum_t *bn, int n, heap_t *hp)
 {
 	assert(n >= 0);
+	int i;
 
 	int in_digs = bn->used;
 	int out_digs = in_digs + (n +15) /16;
@@ -702,7 +705,7 @@ static term_t bsl_1(bignum_t *bn, int n, heap_t *hp)
 	uint8_t *out_buf = heap_tmp_buf(hp, out_digs *2);
 
 	uint8_t *p = in_buf + in_digs *2;
-	for (int i = 0; i < bn->used; i++)
+	for (i = 0; i < bn->used; i++)
 	{
 		uint16_t d = bn->dp[i];
 		--p; *p = (uint8_t)d;
@@ -739,7 +742,7 @@ static term_t bsl_1(bignum_t *bn, int n, heap_t *hp)
 	term_t r = heap_bignum(hp, bn->sign, out_digs, &digits);
 
 	p = out_buf + out_digs *2;
-	for (int i = 0; i < out_digs; i++)
+	for (i = 0; i < out_digs; i++)
 	{
 		uint8_t h, l;
 		--p; l = *p;
@@ -754,6 +757,7 @@ static term_t bsl_1(bignum_t *bn, int n, heap_t *hp)
 static term_t bsr_1(bignum_t *bn, int n, heap_t *hp)
 {
 	assert(n >= 0);
+	int i;
 	if (n >= bn->used*16)
 	{
 		if (bignum_is_neg(bn))
@@ -801,7 +805,7 @@ static term_t bsr_1(bignum_t *bn, int n, heap_t *hp)
 
 	uint8_t *p = out_buf + out_size;
 	uint32_t carry = 1;
-	for (int i = 0; i < out_digs; i++)
+	for (i = 0; i < out_digs; i++)
 	{
 		uint8_t h, l;
 		--p; l = *p;

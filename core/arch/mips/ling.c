@@ -42,14 +42,12 @@
 #include "snprintf.h"
 
 #include "mm.h"
-//#include "nalloc.h"
 
 #include "console.h"
 #include "nalloc.h"
 //#include "netif.h"
 
 #include "term.h"
-//#include "bignum.h"
 #include "atoms.h"
 #include "atom_defs.h"
 //#include "embed.h"
@@ -57,10 +55,9 @@
 #include "proc.h"
 //#include "scheduler.h"
 //#include "ets.h"
-//#include "list_util.h"
 
 // PRNG
-//#include "mtwist.h"
+#include "mtwist.h"
 #pragma config DEBUG = ON
 
 #define quote(x) #x
@@ -107,7 +104,7 @@ int main() {
     //scheduler_init();
     //ets_init();
     //pcre_init();
-    //counters_init();
+    counters_init();
 
     //print_start_info();
     //print_xenmem_info();
