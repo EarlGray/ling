@@ -38,6 +38,7 @@
       <itemPath>../../../include/list_util.h</itemPath>
       <itemPath>../../../include/unicode.h</itemPath>
       <itemPath>../../../include/counters.h</itemPath>
+      <itemPath>../../../include/cluster.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -75,6 +76,7 @@
       <itemPath>../../../unicode.c</itemPath>
       <itemPath>../../../list_util.c</itemPath>
       <itemPath>../../../counters.c</itemPath>
+      <itemPath>../../../cluster.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
