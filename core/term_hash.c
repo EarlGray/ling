@@ -60,6 +60,7 @@ const uint32_t C12 = 268440581;
 // the old hash function described in erl_spec47.ps; used by erlang:hash/2
 uint32_t simple_hash(term_t t, uint32_t h)
 {
+	int i;
 	if (is_immed(t))
 	{
 		if (is_nil(t))
@@ -71,7 +72,7 @@ uint32_t simple_hash(term_t t, uint32_t h)
 			uint8_t *print_name = atoms_get(atom_index(t));
 
 			uint32_t a = 0;
-			for (int i = 1; i <= print_name[0]; i++)
+			for (i = 1; i <= print_name[0]; i++)
 			{
 				uint32_t j = (a << 4) + print_name[i];
 				a = (j & 0x0fffffff) ^ ((j >> 24) & 0xf0);
@@ -98,7 +99,7 @@ uint32_t simple_hash(term_t t, uint32_t h)
 	else if (is_tuple(t))
 	{
 		uint32_t *tdata = peel_tuple(t);
-		for (int i = 1; i <= tdata[0]; i++)
+		for (i = 1; i <= tdata[0]; i++)
 			h = simple_hash(tdata[i], h);
 		return C9 * h + tdata[0];
 	}
@@ -145,7 +146,7 @@ uint32_t simple_hash(term_t t, uint32_t h)
 			h = simple_hash(fun->module, h);
 			h = C2 * h + fun->old_index;
 			h = C2 * h + fun->old_uniq;
-			for (int i = 0; i < num_free; i++)
+			for (i = 0; i < num_free; i++)
 				h = simple_hash(fun->frozen[i], h);
 			return h;
 		}
@@ -178,7 +179,7 @@ uint32_t simple_hash(term_t t, uint32_t h)
 			if (data_size > 15)
 				data_size = 15;
 			uint8_t *data = bs.data + bs.starts /8;
-			for (int i = 0; i < data_size; i++)
+			for (i = 0; i < data_size; i++)
 				h = C1 * h + data[i];
 			return C4 * h + data_size;
 		}
@@ -200,6 +201,7 @@ uint32_t simple_hash(term_t t, uint32_t h)
 // a better hash function used by phash/2
 uint32_t portable_hash(term_t t, uint32_t h)
 {
+	int i;
 	if (is_immed(t))
 	{
 		if (is_nil(t))
@@ -212,7 +214,7 @@ uint32_t portable_hash(term_t t, uint32_t h)
 				v = -v;
 			uint8_t quad[4];
 			PUT_UINT_32_LE(quad, v);
-			for (int i = 0; i < 4; i++)
+			for (i = 0; i < 4; i++)
 				h = C2 * h + quad[i];
 			return y * h;
 		}
@@ -221,7 +223,7 @@ uint32_t portable_hash(term_t t, uint32_t h)
 			uint8_t *print_name = atoms_get(atom_index(t));
 
 			uint32_t a = 0;
-			for (int i = 1; i <= print_name[0]; i++)
+			for (i = 1; i <= print_name[0]; i++)
 			{
 				uint32_t j = (a << 4) + print_name[i];
 				a = (j & 0x0fffffff) ^ ((j >> 24) & 0xf0);
@@ -248,7 +250,7 @@ uint32_t portable_hash(term_t t, uint32_t h)
 	else if (is_tuple(t))
 	{
 		uint32_t *tdata = peel_tuple(t);
-		for (int i = 1; i <= tdata[0]; i++)
+		for (i = 1; i <= tdata[0]; i++)
 			h = portable_hash(tdata[i], h);
 		return C9 * h + tdata[0];
 	}
@@ -302,7 +304,7 @@ uint32_t portable_hash(term_t t, uint32_t h)
 			h = portable_hash(fun->module, h);
 			h = C2 * h + fun->old_index;
 			h = C2 * h + fun->old_uniq;
-			for (int i = 0; i < num_free; i++)
+			for (i = 0; i < num_free; i++)
 				h = portable_hash(fun->frozen[i], h);
 			return h;
 		}
@@ -360,7 +362,7 @@ uint32_t portable_hash(term_t t, uint32_t h)
 		{
 			int data_size = (bs.ends - bs.starts) /8;
 			uint8_t *data = bs.data + bs.starts /8;
-			for (int i = 0; i < data_size; i++)
+			for (i = 0; i < data_size; i++)
 				h = C1 * h + data[i];
 			return C4 * h + data_size;
 		}

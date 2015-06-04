@@ -52,6 +52,7 @@ static int ref_compare(t_long_ref_t *r1, t_long_ref_t *r2);
 
 int are_terms_equal(term_t a, term_t b, int exact)
 {
+	int i;
 	assert(a != b);		// should be checked elsewhere
 
 	if (is_immed(a) || is_immed(b))
@@ -104,7 +105,7 @@ int are_terms_equal(term_t a, term_t b, int exact)
 			if (data1[0] != data2[0])
 				return 0;
 
-			for (int i = 1; i <= data1[0]; i++)
+			for (i = 1; i <= data1[0]; i++)
 				if (data1[i] != data2[i]
 						&& !are_terms_equal(data1[i], data2[i], exact))
 					return 0;
@@ -154,7 +155,7 @@ int are_terms_equal(term_t a, term_t b, int exact)
 					return 0;
 			int num_free = fun_num_free(term_data1);
 			assert(num_free == fun_num_free(term_data2));
-			for (int i = 0; i < num_free; i++)
+			for (i = 0; i < num_free; i++)
 			{
 				term_t v1 = f1->frozen[i];
 				term_t v2 = f2->frozen[i];
@@ -180,7 +181,7 @@ int are_terms_equal(term_t a, term_t b, int exact)
 				return 0;
 			if (!are_terms_equal(m1->keys, m2->keys, exact))
 				return 0;
-			for (int i = 0; i < size; i++)
+			for (i = 0; i < size; i++)
 				if (!are_terms_equal(m1->values[i], m2->values[i], exact))
 					return 0;
 			return 1;
@@ -437,6 +438,7 @@ static int is_term_smaller_1(term_t l1, term_t l2)
 
 static int is_term_smaller_2(term_t t1, term_t t2)
 {
+	int i;
 	assert(is_tuple(t1) && is_tuple(t2));
 	uint32_t *tdata1 = peel_tuple(t1);
 	uint32_t *tdata2 = peel_tuple(t2);
@@ -446,7 +448,7 @@ static int is_term_smaller_2(term_t t1, term_t t2)
 	if (*tdata1 > *tdata2)
 		return 0;
 
-	for (int i = 1; i <= *tdata1; i++)
+	for (i = 1; i <= *tdata1; i++)
 	{
 		if (is_term_smaller(tdata1[i], tdata2[i]))
 			return 1;

@@ -4,6 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="bignum" projectFiles="true">
+        <itemPath>../../../bignum/bignum.h</itemPath>
+        <itemPath>../../../bignum/logtab.h</itemPath>
+        <itemPath>../../../bignum/mpi-config.h</itemPath>
+        <itemPath>../../../bignum/mpi-types.h</itemPath>
+        <itemPath>../../../bignum/mpi.h</itemPath>
+      </logicalFolder>
       <itemPath>../../../include/ling_common.h</itemPath>
       <itemPath>../include/os.h</itemPath>
       <itemPath>../../../include/limits.h</itemPath>
@@ -18,6 +25,11 @@
       <itemPath>../../../include/atom_defs.h</itemPath>
       <itemPath>../../../include/atoms.h</itemPath>
       <itemPath>../../../include/sys_stats.h</itemPath>
+      <itemPath>../../../include/stack.h</itemPath>
+      <itemPath>../../../include/term.h</itemPath>
+      <itemPath>../../../include/getput.h</itemPath>
+      <itemPath>../../../include/heap.h</itemPath>
+      <itemPath>../../../include/term_util.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -26,6 +38,10 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="bignum" projectFiles="true">
+        <itemPath>../../../bignum/bignum.c</itemPath>
+        <itemPath>../../../bignum/mpi.c</itemPath>
+      </logicalFolder>
       <itemPath>../console.c</itemPath>
       <itemPath>../ling.c</itemPath>
       <itemPath>../mm.c</itemPath>
@@ -36,6 +52,13 @@
       <itemPath>../../../hash.c</itemPath>
       <itemPath>../../../atoms.c</itemPath>
       <itemPath>../../../sys_stats.c</itemPath>
+      <itemPath>../../../stack.c</itemPath>
+      <itemPath>../../../heap.c</itemPath>
+      <itemPath>../../../gcoll.c</itemPath>
+      <itemPath>../../../term_hash.c</itemPath>
+      <itemPath>../../../term_util.c</itemPath>
+      <itemPath>../../../bits.c</itemPath>
+      <itemPath>../../../compare.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -171,7 +194,7 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
-        <appendMe value="-I../include -I../../../include -DLING_VER=0.3.2 -DLING_PIC32=1"/>
+        <appendMe value="-I../include -I../../../include -I../../../bignum -DLING_VER=0.3.2 -DLING_PIC32=1"/>
       </C32Global>
       <SKDEPIC32PlatformTool>
         <property key="whatToProgram" value="all"/>

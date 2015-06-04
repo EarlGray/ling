@@ -376,13 +376,14 @@ term_t heap_strz(heap_t *hp, const char *s)
 
 term_t heap_str_N(heap_t *hp, const char *s, int len)
 {
+	int i;
 	if (len == 0)
 		return nil;
 	uint32_t *htop = heap_alloc_N(hp, 2*len);
 	if (htop == 0)
 		return noval;
 	term_t r = tag_cons(htop);
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		htop[0] = tag_int((uint8_t)s[i]);
 		htop[1] = (i == len-1) ?nil :tag_cons(htop+2);
@@ -394,11 +395,12 @@ term_t heap_str_N(heap_t *hp, const char *s, int len)
 
 term_t heap_str(heap_t *hp, const char *s, int len)
 {
+	int i;
 	if (len == 0)
 		return nil;
 	uint32_t *htop = heap_alloc(hp, 2*len);
 	term_t r = tag_cons(htop);
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 		htop[0] = tag_int((uint8_t)s[i]);
 		htop[1] = (i == len-1) ?nil :tag_cons(htop+2);
@@ -410,11 +412,12 @@ term_t heap_str(heap_t *hp, const char *s, int len)
 
 term_t heap_vector_to_list(heap_t *hp, term_t *vec, int num)
 {
+	int i;
 	if (num == 0)
 		return nil;
 	uint32_t *htop = heap_alloc(hp, 2*num);
 	term_t r = tag_cons(htop);
-	for (int i = 0; i < num; i++)
+	for (i = 0; i < num; i++)
 	{
 		htop[0] = vec[i];
 		htop[1] = (i == num-1) ?nil :tag_cons(htop+2);
@@ -426,13 +429,14 @@ term_t heap_vector_to_list(heap_t *hp, term_t *vec, int num)
 
 term_t heap_vector_to_list_N(heap_t *hp, term_t *vec, int num)
 {
+	int i;
 	if (num == 0)
 		return nil;
 	uint32_t *htop = heap_alloc_N(hp, 2*num);
 	if (htop == 0)
 		return noval;
 	term_t r = tag_cons(htop);
-	for (int i = 0; i < num; i++)
+	for (i = 0; i < num; i++)
 	{
 		htop[0] = vec[i];
 		htop[1] = (i == num-1) ?nil :tag_cons(htop+2);

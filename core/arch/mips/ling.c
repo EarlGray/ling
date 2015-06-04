@@ -82,7 +82,6 @@ char my_domain_name[256];
 int main() {
     //-------- init phase 1 --------
     //
-
     mm_init();
     time_init();	// sets start_of_day_wall_clock
 

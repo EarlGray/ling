@@ -13,4 +13,6 @@
  
 #define QUICK_SIZE 4096
 
+#define isfinite(val) (!isinf((double)val))
+
 #endif //__LING_CORE_MIPS_OS_H__

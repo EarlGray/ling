@@ -823,6 +823,7 @@ int bits_bs_put_float(term_t v, uint32_t bcount, int is_little, bits_t *bpc)
 term_t bits_bs_get_integer_imm(t_match_ctx_t *mc,
 		uint32_t bcount, int is_signed, int is_little, heap_t *hp)
 {
+	int i;
 	assert(mc->bs.ends - mc->bs.starts >= bcount);
 
 	if (bcount == 0) // valid
@@ -859,7 +860,7 @@ term_t bits_bs_get_integer_imm(t_match_ctx_t *mc,
 			if (bo > 0)
 				buf[size-1] |= BIT_MASK(8-bo) << bo;
 			int carry = 1;
-			for (int i = 0; i < size; i++)
+			for (i = 0; i < size; i++)
 				NEGATE_8(buf[i], carry);
 			assert(carry == 0);
 			sign = MP_NEG;
@@ -884,7 +885,7 @@ term_t bits_bs_get_integer_imm(t_match_ctx_t *mc,
 			if (bo > 0)
 				buf[0] |= BIT_MASK(8-bo) << bo;
 			int carry = 1;
-			for (int i = size-1; i >= 0; i--)
+			for (i = size-1; i >= 0; i--)
 				NEGATE_8(buf[i], carry);
 			assert(carry == 0);
 			sign = MP_NEG;
@@ -901,7 +902,7 @@ term_t bits_bs_get_integer_imm(t_match_ctx_t *mc,
 	if (is_little)
 	{
 		uint8_t *bp = buf;
-		for (int i = 0; i < ndigs; i++)
+		for (i = 0; i < ndigs; i++)
 		{
 			assert(bp < buf+size);
 			uint16_t l = *bp++;
@@ -912,7 +913,7 @@ term_t bits_bs_get_integer_imm(t_match_ctx_t *mc,
 	else
 	{
 		uint8_t *bp = buf + size-1;
-		for (int i = 0; i < ndigs; i++)
+		for (i = 0; i < ndigs; i++)
 		{
 			assert(bp >= buf);
 			uint16_t l = *bp--;

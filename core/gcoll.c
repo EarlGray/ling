@@ -81,6 +81,7 @@ static region_t *containing_region(region_t *regions, int n, void *addr);
 
 int heap_gc_non_recursive_N(heap_t *hp, region_t *root_regs, int nr_regs)
 {
+    int i;
 	ssi(SYS_STATS_GC_RUNS);
 	hp->minor_gcs++;
 
@@ -223,7 +224,7 @@ int heap_gc_non_recursive_N(heap_t *hp, region_t *root_regs, int nr_regs)
 	};
 
 	// add root regions to the regions stack
-	for (int i = 0; i < nr_regs; i++)
+	for (i = 0; i < nr_regs; i++)
 		RPUSH(&scan_regs, root_regs[i].starts, root_regs[i].ends);
 
 	uint32_t *htop = new_node->starts;
@@ -303,6 +304,7 @@ int heap_gc_non_recursive_N(heap_t *hp, region_t *root_regs, int nr_regs)
 
 int heap_gc_full_sweep_N(heap_t *hp, region_t *root_regs, int nr_regs)
 {
+	int i;
 	// copies all live terms to a single node
 	ssi(SYS_STATS_GC_RUNS);
 	//printk("GC:full-sweep: heap %pp total_size %d", hp, hp->total_size);
@@ -339,7 +341,7 @@ int heap_gc_full_sweep_N(heap_t *hp, region_t *root_regs, int nr_regs)
 	};
 
 	// Add root regions to the regions stack
-	for (int i = 0; i < nr_regs; i++)
+	for (i = 0; i < nr_regs; i++)
 		RPUSH(&scan_regs, root_regs[i].starts, root_regs[i].ends);
 
 	// see comment in heap_gc_non_recursive()

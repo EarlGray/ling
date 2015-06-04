@@ -9,10 +9,12 @@
     $Id: mpi.c,v 1.1 2004/02/08 04:29:29 sting Exp $
  */
 
-#include "mpi.h"
+#include <string.h>
+#include <ctype.h>
 
-#include "string.h"
-#include "ctype.h"
+#include "limits.h"
+
+#include "mpi.h"
 
 #define MP_LOGTAB	1
 

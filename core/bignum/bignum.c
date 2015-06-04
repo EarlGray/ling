@@ -31,6 +31,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "limits.h"
+
 #include "bignum.h"
 
 #include "bits.h"
@@ -132,9 +134,10 @@ uint64_t bignum_to_uint(bignum_t *bn)
 
 double bignum_to_double(bignum_t *bn)
 {
+	int i;
 	double r = 0;
 	double radix = 65536;
-	for (int i = bn->used-1; i >= 0; i--)
+	for (i = bn->used-1; i >= 0; i--)
 		r = r * radix + bn->dp[i];
 	if (bn->sign == MP_NEG)
 		r = -r;
@@ -144,10 +147,11 @@ double bignum_to_double(bignum_t *bn)
 void bignum_to_bytes(bignum_t *bn, uint8_t *arr, int arr_size)
 {
 	assert(arr_size >= bn->used *2);
+	int i;
 	uint8_t *p = arr+arr_size-1;
 	int is_neg = bn->sign == MP_NEG;
 	uint32_t carry = 1;
-	for (int i = 0; i < bn->used; i++)
+	for (i = 0; i < bn->used; i++)
 	{
 		uint16_t d = bn->dp[i];
 		if (is_neg)

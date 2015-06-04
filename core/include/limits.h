@@ -34,6 +34,7 @@
 #ifndef __LING_LIMITS_H__
 #define __LING_LIMITS_H__
 
+// must be before arch_limits.h
 #ifdef PAGE_SIZE
 # undef PAGE_SIZE
 #endif
@@ -41,8 +42,14 @@
 # undef PAGE_SHIFT
 #endif
 
+// must be before arch_limits.h
+#ifndef CHAR_BIT
+#define CHAR_BIT 8
+#endif
+
 #include "arch_limits.h"
 
+// must come after arch_limits.h
 #define PAGE_SHIFT	__PAGE_SHIFT
 #define PAGE_SIZE	__PAGE_SIZE
 
