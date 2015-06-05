@@ -11,12 +11,17 @@
         <itemPath>../../../bignum/mpi-types.h</itemPath>
         <itemPath>../../../bignum/mpi.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2" displayName="mips" projectFiles="true">
+        <itemPath>../include/arch_console.h</itemPath>
+        <itemPath>../include/arch_limits.h</itemPath>
+        <itemPath>../include/arch_mm.h</itemPath>
+        <itemPath>../include/arch_netfe.h</itemPath>
+        <itemPath>../include/os.h</itemPath>
+        <itemPath>../include/ser_cons.h</itemPath>
+        <itemPath>../include/arch_event.h</itemPath>
+      </logicalFolder>
       <itemPath>../../../include/ling_common.h</itemPath>
-      <itemPath>../include/os.h</itemPath>
       <itemPath>../../../include/limits.h</itemPath>
-      <itemPath>../include/arch_limits.h</itemPath>
-      <itemPath>../include/arch_console.h</itemPath>
-      <itemPath>../include/ser_cons.h</itemPath>
       <itemPath>../../../include/nalloc.h</itemPath>
       <itemPath>../../../include/time.h</itemPath>
       <itemPath>../../../include/mtwist.h</itemPath>
@@ -54,6 +59,7 @@
       <itemPath>../../../include/ets.h</itemPath>
       <itemPath>../../../include/monitors.h</itemPath>
       <itemPath>../../../include/decode.h</itemPath>
+      <itemPath>../../../include/event.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -75,7 +81,6 @@
         <itemPath>../power.c</itemPath>
         <itemPath>../stub_bif_hash.c</itemPath>
         <itemPath>../stub_embed.c</itemPath>
-        <itemPath>../stub_sched.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="preload" projectFiles="true">
         <itemPath>../../../preload/literals.c</itemPath>
@@ -132,6 +137,8 @@
       <itemPath>../../../ol_echo.c</itemPath>
       <itemPath>../../../ol_dcons.c</itemPath>
       <itemPath>../../../ol_console.c</itemPath>
+      <itemPath>../event.c</itemPath>
+      <itemPath>../../../scheduler.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

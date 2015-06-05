@@ -292,6 +292,7 @@ static int scheduler_park_runnable_N(proc_t *proc)
 
 proc_t *scheduler_next(proc_t *current, int reds_left)
 {
+	int i;
 	set_phase(PHASE_NEXT);
 	uint32_t reds_used = SLICE_REDUCTIONS -reds_left;
 	ssi(SYS_STATS_CTX_SWITCHES);
@@ -352,7 +353,7 @@ static uint64_t proc_started_ns = 0;
 		// code - terminate them
 		if (scheduler_park_runnable_N(current) < 0)
 			memory_exhausted = 1;
-		for (int i = 0; i < num_purged; i++)
+		for (i = 0; i < num_purged; i++)
 			if (scheduler_signal_exit_N(purgatory[i], current->pid, A_KILL) < 0)
 				memory_exhausted = 1;
 		num_purged = 0;
