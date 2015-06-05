@@ -1,0 +1,4 @@
+#ifndef __FAKE_LING_NETTLE_AES_H__
+#define __FAKE_LING_NETTLE_AES_H__
+
+#endif //__FAKE_LING_NETTLE_AES_H__

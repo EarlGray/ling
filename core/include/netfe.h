@@ -9,8 +9,6 @@
 
 #include "arch_netfe.h"
 
-typedef struct outlet_t outlet_t;
-
 typedef struct netfe_t netfe_t;
 
 void netfe_init(void);

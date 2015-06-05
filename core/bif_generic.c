@@ -1467,6 +1467,7 @@ term_t cbif_setelement3(proc_t *proc, term_t *regs)
 
 term_t cbif_make_tuple2(proc_t *proc, term_t *regs)
 {
+	int i;
 	term_t N = regs[0];
 	term_t InitVal = regs[1];
 
@@ -1484,7 +1485,7 @@ term_t cbif_make_tuple2(proc_t *proc, term_t *regs)
 	heap_set_top(&proc->hp, htop+arity+1);
 
 	*htop = arity;
-	for (int i = 1; i <= arity; i++)
+	for (i = 1; i <= arity; i++)
 		htop[i] = InitVal;
 
 	return tag_tuple(htop);
@@ -1492,6 +1493,7 @@ term_t cbif_make_tuple2(proc_t *proc, term_t *regs)
 
 term_t cbif_make_tuple3(proc_t *proc, term_t *regs)
 {
+	int i;
 	term_t N = regs[0];
 	term_t InitVal = regs[1];
 	term_t DefList = regs[2];
@@ -1514,7 +1516,7 @@ term_t cbif_make_tuple3(proc_t *proc, term_t *regs)
 	heap_set_top(&proc->hp, htop+arity+1);
 
 	*htop = arity;
-	for (int i = 1; i <= arity; i++)
+	for (i = 1; i <= arity; i++)
 		htop[i] = InitVal;
 
 	term_t l = DefList;

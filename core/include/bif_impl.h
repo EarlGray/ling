@@ -73,6 +73,7 @@
 #include "cluster.h"
 #include "decode.h"
 
+#include "outlet.h"
 #include "monitors.h"
 #include "console.h"
 #include "netfe.h"
@@ -84,7 +85,6 @@
 #include "mtwist.h"
 #include "prof.h"
 
-#include "outlet.h"
 #include "netif.h"
 
 #include "disk.h"

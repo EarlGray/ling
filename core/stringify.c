@@ -407,6 +407,7 @@ static int printable_chars(term_t l)
 
 static void quote_atom(unsigned char *name, char *buf, int len)
 {
+    int i;
 	if (len == 0)
 		return;
 
@@ -418,7 +419,7 @@ static void quote_atom(unsigned char *name, char *buf, int len)
 		quotes_needed = 1;
 	else
 	{
-		for (int i = 1; i <= name[0]; i++)
+		for (i = 1; i <= name[0]; i++)
 		{
 			if (!isalnum(name[i]) && (name[i] != '_') && (name[i] != '@'))
 			{

@@ -71,6 +71,9 @@ uint32_t __shrink_ptr(void *p);
 
 typedef uint8_t byte_t;
 
+struct outlet_t;
+typedef  struct outlet_t  outlet_t;
+
 extern uint64_t start_of_day_wall_clock;
 
 extern char my_domain_name[];

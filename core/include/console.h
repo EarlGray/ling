@@ -4,7 +4,6 @@
 #include "arch_console.h"
 #include "ser_cons.h"
 
-typedef struct outlet_t outlet_t;
 int console_is_initialized(void);
 
 void console_attach(outlet_t *ol);

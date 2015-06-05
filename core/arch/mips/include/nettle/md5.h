@@ -1,0 +1,4 @@
+#ifndef __FAKE_LING_NETTLE_MD5_H__
+#define __FAKE_LING_NETTLE_MD5_H__
+
+#endif //__FAKE_LING_NETTLE_MD5_H__

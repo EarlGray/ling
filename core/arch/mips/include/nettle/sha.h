@@ -1,0 +1,4 @@
+#ifndef __FAKE_LING_NETTLE_SHA_H__
+#define __FAKE_LING_NETTLE_SHA_H__
+
+#endif //__FAKE_LING_NETTLE_SHA_H__

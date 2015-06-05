@@ -172,6 +172,7 @@ term_t ext_term_decode(uint32_t *htop, uint32_t expected_heap_size,
 
 static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 {
+	int i;
 	if (depth > EXT_TERM_MAX_DEPTH)
 		return -TOO_DEEP;
 
@@ -206,7 +207,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 	{
 		More(4);
 		int arity = GetUint32();
-		for (int i = 0; i < arity; i++)
+		for (i = 0; i < arity; i++)
 		{
 			// K:V pair
 			int x = ext_term_decode_size2(depth+1, es);
@@ -288,7 +289,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 		int arity = GetByte();
 		if (arity == 0)
 			break;	// no heap frag
-		for (int i = 0; i < arity; i++)
+		for (i = 0; i < arity; i++)
 		{
 			int x = ext_term_decode_size2(depth+1, es);
 			if (x < 0)
@@ -303,7 +304,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 		int arity = GetUint32();
 		if (arity == 0)
 			break;	// no heap frag
-		for (int i = 0; i < arity; i++)
+		for (i = 0; i < arity; i++)
 		{
 			int x = ext_term_decode_size2(depth+1, es);
 			if (x < 0)
@@ -328,7 +329,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 		int len = GetUint32();
 		if (len < 0)
 			return -1;
-		for (int i = 0; i < len+1; i++)		//+1 for the tail
+		for (i = 0; i < len+1; i++)		//+1 for the tail
 		{
 			int x = ext_term_decode_size2(depth+1, es);
 			if (x < 0)
@@ -408,7 +409,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 		if (x < 0)
 			return x;
 		//Free vars
-		for (int i = 0; i < num_free; i++);
+		for (i = 0; i < num_free; i++);
 		{
 			x = ext_term_decode_size2(depth+1, es);
 			if (x < 0)
@@ -440,7 +441,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 		//Free vars
 		if (x < 0)
 			return x;
-		for (int i = 0; i < num_free; i++)
+		for (i = 0; i < num_free; i++)
 		{
 			x = ext_term_decode_size2(depth+1, es);
 			if (x < 0)
@@ -499,6 +500,7 @@ static int ext_term_decode_size2(int depth, ext_term_scan_t *es)
 
 static term_t ext_term_decode2(ext_term_scan_t *es)
 {
+	int i;
 	switch(GetByte())
 	{
 	case ATOM_CACHE_REF:
@@ -584,7 +586,7 @@ static term_t ext_term_decode2(ext_term_scan_t *es)
 		term_t *vw = es->htop;
 		box_map(es->htop, arity, keys);
 
-		for (int i = 0; i < arity; i++)
+		for (i = 0; i < arity; i++)
 		{
 			term_t k = ext_term_decode2(es);
 			if (k == noval)
@@ -715,7 +717,7 @@ static term_t ext_term_decode2(ext_term_scan_t *es)
 		term_t *elts = (term_t *)es->htop;
 		es->htop += nelts;
 
-		for (int i = 0; i < nelts; i++)
+		for (i = 0; i < nelts; i++)
 		{
 			term_t e = ext_term_decode2(es);
 			if (e == noval)
@@ -738,7 +740,7 @@ static term_t ext_term_decode2(ext_term_scan_t *es)
 		term_t *elts = (term_t *)es->htop;
 		es->htop += nelts;
 
-		for (int i = 0; i < nelts; i++)
+		for (i = 0; i < nelts; i++)
 		{
 			term_t e = ext_term_decode2(es);
 			if (e == noval)
@@ -756,7 +758,7 @@ static term_t ext_term_decode2(ext_term_scan_t *es)
 		MoreSkip2(len);
 
 		term_t t = nil;
-		for (int i = len-1; i >= 0; i--)
+		for (i = len-1; i >= 0; i--)
 		{
 			term_t cons = tag_cons(es->htop);
 			*es->htop++ = tag_int(str[i]);
@@ -1046,6 +1048,7 @@ static term_t ext_term_decode2(ext_term_scan_t *es)
 
 static term_t complete_bignum_decode(int len, ext_term_scan_t *es)
 {
+	int i;
 	int s = GetByte();
 	int sign = (s == 0) ?MP_ZPOS :MP_NEG;
 	uint8_t *p = es->enc_data;
@@ -1055,7 +1058,7 @@ static term_t complete_bignum_decode(int len, ext_term_scan_t *es)
 	uint16_t digs[nrd];
 
 	uint8_t *end = p +len;
-	for (int i = 0; i < nrd; i++)
+	for (i = 0; i < nrd; i++)
 	{
 		uint8_t l = *p++;
 		uint8_t h = (p < end) ?*p :0; p++;
@@ -1071,8 +1074,9 @@ static term_t complete_fun_decode(int num_free, int arity, term_t pid,
 	   term_t module, int index, uint32_t *uniq, int old_index, int old_uniq,
 	   fun_entry_t *fe, ext_term_scan_t *es)
 {
+	int i;
 	term_t free[num_free];
-	for (int i = 0; i < num_free; i++)
+	for (i = 0; i < num_free; i++)
 	{
 		term_t v = ext_term_decode2(es);
 		if (v == noval)
@@ -1100,6 +1104,7 @@ int ext_term_encode_size(term_t t, int minor_ver)
 
 static int encode_size2(int depth, term_t t, int minor_ver)
 {
+	int i;
 	if (depth > EXT_TERM_MAX_DEPTH)
 		return -TOO_DEEP;
 	
@@ -1150,7 +1155,7 @@ static int encode_size2(int depth, term_t t, int minor_ver)
 			size += 1; //104
 		else
 			size += 4; //105
-		for (int i = 1; i <= tdata[0]; i++)
+		for (i = 1; i <= tdata[0]; i++)
 		{
 			int s = encode_size2(depth+1, tdata[i], minor_ver);
 			if (s < 0)
@@ -1206,7 +1211,7 @@ static int encode_size2(int depth, term_t t, int minor_ver)
 			t_fun_t *fun = (t_fun_t *)tdata;
 			int free_var_size = 0;
 			int num_free = fun_num_free(tdata);
-			for (int i = 0; i < num_free; i++)
+			for (i = 0; i < num_free; i++)
 			{
 				int s = encode_size2(depth+1, fun->frozen[i], minor_ver);
 				if (s < 0)
@@ -1374,6 +1379,7 @@ void ext_term_encode(term_t t, uint8_t *enc_data, int expected_size, int minor_v
 
 static void encode2(term_t t, enc_ctx_t *ec)
 {
+	int i;
 	if (is_int(t))
 	{
 		int v = int_value(t);
@@ -1443,7 +1449,7 @@ static void encode2(term_t t, enc_ctx_t *ec)
 			PutByte(LARGE_TUPLE_EXT);
 			PutUint32(len);
 		}
-		for (int i = 1; i <= len; i++)
+		for (i = 1; i <= len; i++)
 			encode2(tdata[i], ec);
 	}
 	else if (is_boxed(t))
@@ -1580,7 +1586,7 @@ static void encode2(term_t t, enc_ctx_t *ec)
 			encode2(t_old_index, ec);
 			encode2(t_old_uniq, ec);
 			encode2(fun->pid, ec);
-			for (int i = 0; i < num_free; i++)
+			for (i = 0; i < num_free; i++)
 				encode2(fun->frozen[i], ec);
 			uint32_t size = ec->enc_data - sizep;
 			PUT_UINT_32(sizep, size);
@@ -1603,7 +1609,7 @@ static void encode2(term_t t, enc_ctx_t *ec)
 			uint32_t size = *p++;
 			PutByte(MAP_EXT);
 			PutUint32(size);
-			for (int i = 0; i < size; i++)
+			for (i = 0; i < size; i++)
 			{
 				encode2(*p++, ec);
 				encode2(map->values[i], ec);

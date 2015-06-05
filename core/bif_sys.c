@@ -574,6 +574,7 @@ term_t cbif_function_exported3(proc_t *proc, term_t *regs)
 
 term_t cbif_fun_info1(proc_t *proc, term_t *regs)
 {
+	int i;
 	term_t FunExp = regs[0];
 	if (!is_boxed(FunExp))
 		badarg(FunExp);
@@ -594,7 +595,7 @@ term_t cbif_fun_info1(proc_t *proc, term_t *regs)
 			A_NEW_UNIQ,
 		};
 
-		for (int i = 0; i < NUM_FUN_INFO; i++)
+		for (i = 0; i < NUM_FUN_INFO; i++)
 		{
 			term_t info = fun_get_info((t_fun_t *)tdata, infos[i], &proc->hp);
 			infos[i] = heap_tuple2(&proc->hp, infos[i], info);
@@ -612,7 +613,7 @@ term_t cbif_fun_info1(proc_t *proc, term_t *regs)
 			A_ARITY,
 		};
 
-		for (int i = 0; i < NUM_EXPORT_INFO; i++)
+		for (i = 0; i < NUM_EXPORT_INFO; i++)
 		{
 			term_t info = export_get_info((t_export_t *)tdata, infos[i]);
 			infos[i] = heap_tuple2(&proc->hp, infos[i], info);

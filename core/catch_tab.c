@@ -65,10 +65,11 @@ uint32_t catches_next_base(void)
 
 uint32_t catches_append_block(uint32_t **labels, int nr_labs)
 {
+	int i;
 	if (nr_catch_refs + nr_labs > CATCH_REFS_SIZE)
 		fatal_error("too many catches: %d more requested", nr_labs);
 
-	for (int i = 0; i < nr_labs; i++)
+	for (i = 0; i < nr_labs; i++)
 	{
 		catch_refs[nr_catch_refs+i].code = labels[i];
 		catch_refs[nr_catch_refs+i].ord = next_ord_base+i;
@@ -141,7 +142,8 @@ uint32_t *catch_jump_to(int ord)
 void catches_attach_preloaded_code(int start_index,
 						int end_index, uint32_t *code)
 {
-	for (int i = start_index; i < end_index; i++)
+	int i;
+	for (i = start_index; i < end_index; i++)
 	{
 		uint32_t offset = shrink_ptr(catch_refs[i].code);
 		catch_refs[i].code = code + offset;

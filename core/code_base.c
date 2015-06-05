@@ -46,7 +46,63 @@
 #include "hash.h"
 #include "limits.h"
 
+#ifndef LING_PIC32
 #include "code_base.inc"
+#else
+export_t preloaded_exports[] = {};
+#define NUM_PRE_EXPS 0
+#define NUM_BIF_EXPS 0
+
+fun_entry_t premod_console_funs[] = {};
+line_info_t premod_console_line_refs[] = {};
+term_t  premod_console_file_names[] = {};
+
+uint8_t premod_console_strings[] = "";
+
+fun_entry_t premod_erl_prim_loader_funs[] = {};
+line_info_t premod_erl_prim_loader_line_refs[] = {};
+
+term_t  premod_erl_prim_loader_file_names[] = {};
+uint8_t premod_erl_prim_loader_strings[] = "";
+
+fun_entry_t premod_erlang_funs[] = {};
+
+line_info_t premod_erlang_line_refs[] = {};
+term_t  premod_erlang_file_names[] = {};
+
+uint8_t premod_erlang_strings[] = "FOR1INGEAM";
+
+fun_entry_t premod_error_handler_funs[] = {}; 
+line_info_t premod_error_handler_line_refs[] = {};
+
+term_t  premod_error_handler_file_names[] = {
+	A_FUNNY1298,
+};
+
+uint8_t premod_error_handler_strings[] = "";
+
+fun_entry_t premod_init_funs[] = {};
+line_info_t premod_init_line_refs[] = {};
+
+term_t  premod_init_file_names[] = {
+	A_FUNNY1299,
+};
+
+uint8_t premod_init_strings[] = "\x2d""traalun";
+
+fun_entry_t premod_prim_inet_funs[] = {};
+line_info_t premod_prim_inet_line_refs[] = {};
+
+term_t  premod_prim_inet_file_names[] = {
+	A_FUNNY1300,
+};
+
+uint8_t premod_prim_inet_strings[] = "\x16""\x00""\x00""\x00""\x03""";
+
+module_info_t preloaded_modules[] = {};
+
+#define NUM_PRE_MODS 6
+#endif
 
 static hash_t *exports_map;
 static hash_t *modules_map;
@@ -64,11 +120,12 @@ static int decode_literals(module_info_t *mi,
 
 void code_base_init(void)
 {
+	int i;
 	exports_map = hash_make();
 
 	// TODO: add custom hash functions and devise a better function for exports
 
-	for (int i = 0; i < NUM_PRE_EXPS; i++)
+	for (i = 0; i < NUM_PRE_EXPS; i++)
 	{
 		//NB: dependency on export_t layout, also below
 		hash_set(exports_map,
@@ -77,7 +134,7 @@ void code_base_init(void)
 	}
 
 	modules_map = hash_make();
-	for (int i = 0; i < NUM_PRE_MODS; i++)
+	for (i = 0; i < NUM_PRE_MODS; i++)
 	{
 		hash_set(modules_map,
 			preloaded_modules+i, 2*sizeof(uint32_t),
@@ -237,6 +294,7 @@ void module_fix_preloaded_code(module_info_t *mi,
 						uint32_t *code_starts, uint32_t code_size,
 						uint32_t *lit_fixups[], int num_fixups)
 {
+	int i;
 	mi->code_starts = code_starts;
 	mi->code_size = code_size;
 
@@ -245,19 +303,19 @@ void module_fix_preloaded_code(module_info_t *mi,
 	term_t literals[mi->num_lits];
 	decode_literals(mi, enc_lits, literals);	//TODO: return value ignored
 
-	for (int i = 0; i < num_fixups; i++)
+	for (i = 0; i < num_fixups; i++)
 	{
 		uint32_t index = *lit_fixups[i];
 		*lit_fixups[i] = (uint32_t) literals[index];
 	}
 
-	for (int i = 0; i < mi->num_funs; i++)
+	for (i = 0; i < mi->num_funs; i++)
 	{
 		unsigned long offset = (unsigned long)mi->funs_table[i].entry;
 		mi->funs_table[i].entry = code_starts + offset;
 	}
 
-	for (int i = mi->exp_start_index; i < mi->exp_end_index; i++)
+	for (i = mi->exp_start_index; i < mi->exp_end_index; i++)
 	{
 		unsigned long offset = (unsigned long)preloaded_exports[i].entry;
 		preloaded_exports[i].entry = code_starts + offset;
@@ -273,6 +331,7 @@ void module_fix_preloaded_code(module_info_t *mi,
 static int decode_literals(module_info_t *mi,
 	   			uint8_t *enc_lits, term_t *literals)
 {
+	int i;
 	if (mi->num_lits == 0)
 	{
 		mi->lit_node = 0;	// no literal pool
@@ -288,7 +347,7 @@ static int decode_literals(module_info_t *mi,
 	int total_heap_size = 0;
 
 	uint8_t *ptr = enc_lits;
-	for (int i = 0; i < mi->num_lits; i++)
+	for (i = 0; i < mi->num_lits; i++)
 	{
 		//TODO: be more cautious here as the code
 		// is used for dynamic code loading too
@@ -318,7 +377,7 @@ static int decode_literals(module_info_t *mi,
 	heap_init(&mi->lit_heap, mi->lit_node->starts, mi->lit_node->ends);
 	uint32_t *htop = heap_alloc(&mi->lit_heap, total_heap_size);
 
-	for (int i = 0; i < mi->num_lits; i++)
+	for (i = 0; i < mi->num_lits; i++)
 	{
 		int heap_size = literal_table[i].heap_size;
 		literals[i] = ext_term_decode(htop,
@@ -957,7 +1016,7 @@ int code_base_load_N(term_t mod_name, uint8_t *ling_data, int data_size)
 	p = chunks[LINE_IDX].data +8;
 	left = chunks[LINE_IDX].size -8;
 
-	for (int i = 0; i < nr_line_refs; i++)
+	for (i = 0; i < nr_line_refs; i++)
 	{
 		if (left < 2 *4)
 			return -BAD_ARG;
@@ -973,7 +1032,7 @@ int code_base_load_N(term_t mod_name, uint8_t *ling_data, int data_size)
 		//debug("offset %d location %08x\r\n", offset, location);
 	}
 
-	for (int i = 0; i < nr_file_names; i++)
+	for (i = 0; i < nr_file_names; i++)
 	{
 		if (left < 4)
 			return -BAD_ARG;
