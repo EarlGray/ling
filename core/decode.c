@@ -1336,6 +1336,7 @@ static term_t decode_tls(bits_t *bs, term_t parent,
 	else
 	{
 		// a special case of SSLv2 handshake message
+		int i;
 		uint8_t hb = type & 0x7f;
 		uint8_t lb = vmaj;
 		uint32_t dlen = (((uint32_t)hb) << 8) | lb;
@@ -1356,7 +1357,7 @@ static term_t decode_tls(bits_t *bs, term_t parent,
 
 		uint8_t *ptr;
 		data = heap_make_bin(hp, sizeof(prefix) +dlen, &ptr);
-		for (int i = 0; i < sizeof(prefix); i++)
+		for (i = 0; i < sizeof(prefix); i++)
 			*ptr++ = prefix[i];
 
 		while (dlen-- > 0)

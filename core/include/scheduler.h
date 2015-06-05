@@ -58,4 +58,7 @@ term_t scheduler_list_processes(heap_t *hp);
 term_t scheduler_list_registered(heap_t *hp);
 void scheduler_add_purged(proc_t *proc);
 
+#include "hash.h"
+extern hash_t *registry;
+
 //EOF

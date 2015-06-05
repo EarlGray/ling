@@ -42,8 +42,10 @@
 #include "proc.h"
 #include "console.h"
 #include "netif.h"
-#include "disk.h"
 #include "bits.h"
+#if LING_CONFIG_DISK
+#include "disk.h"
+#endif
 
 static uint32_t next_outlet_id = 0;
 
@@ -56,12 +58,14 @@ struct drv_spec_t {
 };
 
 outlet_t *ol_echo_factory(proc_t *cont_proc, uint32_t bit_opts);
-outlet_t *ol_vif_factory(proc_t *cont_proc, uint32_t bit_opts);
 outlet_t *ol_dcons_factory(proc_t *cont_proc, uint32_t bit_opts);
 outlet_t *ol_console_factory(proc_t *cont_proc, uint32_t bit_opts);
+#ifndef LING_PIC32
+outlet_t *ol_vif_factory(proc_t *cont_proc, uint32_t bit_opts);
 outlet_t *ol_dns_factory(proc_t *cont_proc, uint32_t bit_opts);
 outlet_t *ol_udp_factory(proc_t *cont_proc, uint32_t bit_opts);
 outlet_t *ol_tcp_factory(proc_t *cont_proc, uint32_t bit_opts);
+#endif
 #if LING_CONFIG_DISK
 outlet_t *ol_disk_factory(proc_t *cont_proc, uint32_t bit_opts);
 #endif
@@ -70,12 +74,16 @@ outlet_t *ol_disk_factory(proc_t *cont_proc, uint32_t bit_opts);
 
 drv_spec_t outlet_drivers[NUM_DRIVERS] = {
 	{ .name = A_ECHO,			.factory = ol_echo_factory },
+#ifndef LING_PIC32
 	{ .name = A_VIF,			.factory = ol_vif_factory },
+#endif
 	{ .name = A_DUMB_CONSOLE,	.factory = ol_dcons_factory },
 	{ .name = A_CONSOLE,		.factory = ol_console_factory },
+#ifndef LING_PIC32
 	{ .name = A_DNS,			.factory = ol_dns_factory },
 	{ .name = A_UDP,			.factory = ol_udp_factory },
 	{ .name = A_TCP,			.factory = ol_tcp_factory },
+#endif
 #if LING_CONFIG_DISK
 	{ .name = A_DISK,			.factory = ol_disk_factory },
 #endif
@@ -301,6 +309,7 @@ void outlet_unregister(outlet_t *ol)
 
 void outlet_pass_new_data(outlet_t *ol, uint8_t *data, int dlen)
 {
+	int i;
 	proc_t *proc = scheduler_lookup(ol->owner);
 	if (proc == 0)
 		return;	// drop
@@ -353,7 +362,7 @@ void outlet_pass_new_data(outlet_t *ol, uint8_t *data, int dlen)
 		if (htop != 0)
 		{
 			td = nil;
-			for (int i = dlen -1; i >= 0; i--)
+			for (i = dlen -1; i >= 0; i--)
 			{
 				htop[0] = tag_int(data[i]);
 				htop[1] = td;

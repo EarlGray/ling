@@ -87,7 +87,9 @@
 
 #include "netif.h"
 
+#if LING_CONFIG_DISK
 #include "disk.h"
+#endif
 
 #include "lwip/ip_addr.h"
 #include "lwip/stats.h"

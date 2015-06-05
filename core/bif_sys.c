@@ -985,6 +985,7 @@ term_t cbif_secret2_0(proc_t *proc, term_t *regs)
 
 term_t cbif_disk_info1(proc_t *proc, term_t *regs)
 {
+#if LING_CONFIG_DISK
 	term_t Item = regs[0];
 	if (!is_atom(Item))
 		badarg(Item);
@@ -1014,6 +1015,9 @@ term_t cbif_disk_info1(proc_t *proc, term_t *regs)
 		badarg(Item);
 
 	return heap_tuple2(&proc->hp, Item, val);
+#else
+    return noval;
+#endif
 }
 
 term_t cbif_new_counter1(proc_t *proc, term_t *regs)

@@ -57,11 +57,12 @@ static uint32_t *terms_copy(stack_t *stack, term_t *terms, int num,
 
 int ets_terms_copy_size(term_t *terms, int num)
 {
+    int i;
 	uint32_t cradle[ETS_TERMS_COPY_CRADLE_SIZE];
 	stack_t st;
 	stack_init(&st, 1, cradle, ETS_TERMS_COPY_CRADLE_SIZE);
 
-	for (int i = 0; i < num; i++)
+	for (i = 0; i < num; i++)
 	{
 		uint32_t *push = stack_push_N(&st);
 		if (push == 0)
@@ -86,11 +87,12 @@ int ets_terms_copy_size(term_t *terms, int num)
 
 int ets_terms_copy_size_N(term_t *terms, int num)
 {
+    int i;
 	uint32_t cradle[ETS_TERMS_COPY_CRADLE_SIZE];
 	stack_t st;
 	stack_init(&st, 1, cradle, ETS_TERMS_COPY_CRADLE_SIZE);
 
-	for (int i = 0; i < num; i++)
+	for (i = 0; i < num; i++)
 	{
 		uint32_t *push = stack_push_N(&st);
 		if (push == 0)
@@ -109,6 +111,7 @@ int ets_terms_copy_size_N(term_t *terms, int num)
 
 static int ets_terms_copy_size2(stack_t *st)
 {
+	int i;
 	int hsize = 0;
 pop_term:
 	if (stack_is_empty(st))
@@ -143,7 +146,7 @@ tail_recur:
 		if (arity == 0)
 			goto pop_term; // no heap frag
 		hsize += 1 +arity;
-		for (int i = 0; i < arity -1; i++)
+		for (i = 0; i < arity -1; i++)
 		{
 			uint32_t *push = stack_push_N(st);
 			if (push == 0)
@@ -176,7 +179,7 @@ tail_recur:
 		int num_free = fun_num_free(tdata);
 		hsize += WSIZE(t_fun_t) + num_free;
 
-		for (int i = 0; i < num_free -1; i++)
+		for (i = 0; i < num_free -1; i++)
 		{
 			uint32_t *push = stack_push_N(st);
 			if (push == 0)

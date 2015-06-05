@@ -176,13 +176,14 @@ int is_module_code(module_info_t *mi, uint32_t *ptr)
 
 int has_module_fun(module_info_t *mi, term_t t)
 {
+	int i;
 	if (is_boxed_fun(t))
 	{
 		t_fun_t *fun = (t_fun_t *)peel_boxed(t);
 		if (fun->fe >= mi->funs_table && fun->fe < mi->funs_table +mi->num_funs)
 			return 1;	// fun->fe can be zero
 		int num_free = fun_num_free((void *)fun);
-		for (int i = 0; i < num_free; i++)
+		for (i = 0; i < num_free; i++)
 		{
 			if (has_module_fun(mi, fun->frozen[i]))
 				return 1;
@@ -192,7 +193,7 @@ int has_module_fun(module_info_t *mi, term_t t)
 	{
 		uint32_t *p = peel_tuple(t);
 		uint32_t sz = *p++;
-		for (int i = 0; i < sz; i++)
+		for (i = 0; i < sz; i++)
 		{
 			if (has_module_fun(mi, p[i]))
 				return 1;
@@ -222,6 +223,7 @@ int proc_references_module(proc_t *proc, module_info_t *mi)
 	//	4. funs reachable from regs and stack
 	//	5. catch ref
 	//
+	int i;
 
 	if (is_module_code(mi, proc->cap.ip))
 		return 1;
@@ -256,7 +258,7 @@ int proc_references_module(proc_t *proc, module_info_t *mi)
 	}
 
 	// funs in regs
-	for (int i = 0; i < proc->cap.live; i++)
+	for (i = 0; i < proc->cap.live; i++)
 	{
 		if (has_module_fun(mi, proc->cap.regs[i]))
 			return 1;

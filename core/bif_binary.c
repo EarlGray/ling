@@ -485,6 +485,7 @@ term_t cbif_decode_unsigned2(proc_t *proc, term_t *regs)
 	bif_not_implemented();
 }
 
+#ifndef LING_PIC32
 term_t cbif_embedded_buckets0(proc_t *proc, term_t *regs)
 {
 	return embed_all_buckets(&proc->hp);
@@ -606,6 +607,7 @@ term_t cbif_lookup_embedded1(proc_t *proc, term_t *regs)
 
 	return bin;
 }
+#endif
 
 term_t cbif_ip_checksum1(proc_t *proc, term_t *regs)
 {

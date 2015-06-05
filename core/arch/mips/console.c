@@ -1,11 +1,14 @@
 #include <stdbool.h>
 
 #include "ling_common.h"
+#include "outlet.h"
 
 static struct {
     bool is_initialized;
+    outlet_t *attached_outlet;
 } the_console = {
-    .is_initialized = false
+    .is_initialized = false,
+    .attached_outlet = 0,
 };
 
 void console_init()
@@ -16,6 +19,22 @@ void console_init()
 
 int console_is_initialized(void) {
     return (int)the_console.is_initialized;
+}
+
+int console_write(char *buf, int len) {
+    printk(buf);
+}
+
+void console_attach(outlet_t *ol) {
+	if (the_console.attached_outlet != 0)
+		printk("%ptWARNING: steals control over console from %pt\n",
+				T(ol->oid), T(the_console.attached_outlet->oid));
+	the_console.attached_outlet = ol;
+}
+
+void console_detach(outlet_t *ol) {
+	assert(the_console.attached_outlet == ol);
+	the_console.attached_outlet = 0;
 }
 
 int ser_cons_write(char *buf, int len)

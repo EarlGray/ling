@@ -49,6 +49,11 @@
       <itemPath>../../../include/stringify.h</itemPath>
       <itemPath>../../../include/outlet.h</itemPath>
       <itemPath>../../../include/scheduler.h</itemPath>
+      <itemPath>../../../include/timers.h</itemPath>
+      <itemPath>../../../include/prof.h</itemPath>
+      <itemPath>../../../include/ets.h</itemPath>
+      <itemPath>../../../include/monitors.h</itemPath>
+      <itemPath>../../../include/decode.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -61,14 +66,21 @@
         <itemPath>../../../bignum/bignum.c</itemPath>
         <itemPath>../../../bignum/mpi.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f3" displayName="mips" projectFiles="true">
+        <itemPath>../console.c</itemPath>
+        <itemPath>../stub_bif_re.c</itemPath>
+        <itemPath>../ling.c</itemPath>
+        <itemPath>../time.c</itemPath>
+        <itemPath>../mm.c</itemPath>
+        <itemPath>../power.c</itemPath>
+        <itemPath>../stub_bif_hash.c</itemPath>
+        <itemPath>../stub_embed.c</itemPath>
+        <itemPath>../stub_sched.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="f2" displayName="preload" projectFiles="true">
         <itemPath>../../../preload/literals.c</itemPath>
       </logicalFolder>
-      <itemPath>../console.c</itemPath>
-      <itemPath>../ling.c</itemPath>
-      <itemPath>../mm.c</itemPath>
       <itemPath>../../../nalloc.c</itemPath>
-      <itemPath>../time.c</itemPath>
       <itemPath>../../../mtwist.c</itemPath>
       <itemPath>../../../strings.c</itemPath>
       <itemPath>../../../hash.c</itemPath>
@@ -95,6 +107,31 @@
       <itemPath>../../../ext_term.c</itemPath>
       <itemPath>../../../snprintf.c</itemPath>
       <itemPath>../../../stringify.c</itemPath>
+      <itemPath>../../../ling_main.c</itemPath>
+      <itemPath>../../../timers.c</itemPath>
+      <itemPath>../../../proc.c</itemPath>
+      <itemPath>../../../bif_generic.c</itemPath>
+      <itemPath>../../../outlet.c</itemPath>
+      <itemPath>../../../prof.c</itemPath>
+      <itemPath>../../../bif_list.c</itemPath>
+      <itemPath>../../../ets.c</itemPath>
+      <itemPath>../../../bif_ets.c</itemPath>
+      <itemPath>../../../bif_sys.c</itemPath>
+      <itemPath>../../../bif_proc.c</itemPath>
+      <itemPath>../../../ets_alloc.c</itemPath>
+      <itemPath>../../../ets_copy.c</itemPath>
+      <itemPath>../../../ets_hash.c</itemPath>
+      <itemPath>../../../ets_match.c</itemPath>
+      <itemPath>../../../ets_ordset.c</itemPath>
+      <itemPath>../../../proc_util.c</itemPath>
+      <itemPath>../../../monitors.c</itemPath>
+      <itemPath>../../../bif_outlet.c</itemPath>
+      <itemPath>../../../bif_binary.c</itemPath>
+      <itemPath>../../../bif_unicode.c</itemPath>
+      <itemPath>../../../decode.c</itemPath>
+      <itemPath>../../../ol_echo.c</itemPath>
+      <itemPath>../../../ol_dcons.c</itemPath>
+      <itemPath>../../../ol_console.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -309,6 +346,7 @@
         <property key="use-cci" value="false"/>
         <property key="use-iar" value="false"/>
         <property key="use-indirect-calls" value="false"/>
+        <appendMe value="-G0"/>
       </C32>
       <C32-AR>
         <property key="additional-options-chop-files" value="false"/>
@@ -347,7 +385,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="0x70000"/>
+        <property key="heap-size" value="0x50000"/>
         <property key="input-libraries" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
@@ -355,12 +393,13 @@
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
         <property key="preprocessor-macros" value=""/>
-        <property key="remove-unused-sections" value="false"/>
+        <property key="remove-unused-sections" value="true"/>
         <property key="report-memory-usage" value="true"/>
         <property key="stack-size" value=""/>
         <property key="symbol-stripping" value=""/>
         <property key="trace-symbols" value=""/>
         <property key="warn-section-align" value="false"/>
+        <appendMe value="-G0"/>
       </C32-LD>
       <C32CPP>
         <property key="additional-warnings" value="false"/>

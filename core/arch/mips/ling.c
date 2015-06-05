@@ -63,11 +63,7 @@
 #define quote(x) #x
 #define quote_and_expand(x) quote(x)
 
-#warning "opcode_get: temporary stub"
-opcode_info_t *opcode_get(uint32_t n)
-{
-	return 0;
-}
+void printk(const char *fmt, ...);
 
 void proc_main(proc_t *proc);
 

@@ -71,8 +71,11 @@ uint32_t __shrink_ptr(void *p);
 
 typedef uint8_t byte_t;
 
+#ifndef __OUTLET_T_DEFINED__
+#define __OUTLET_T_DEFINED__
 struct outlet_t;
 typedef  struct outlet_t  outlet_t;
+#endif //__OUTLET_T_DEFINED__
 
 extern uint64_t start_of_day_wall_clock;
 

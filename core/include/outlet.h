@@ -40,6 +40,13 @@
 #include "term.h"
 #include "proc.h"
 
+// must come before netfe.h
+#ifndef __OUTLET_T_DEFINED__
+#define __OUTLET_T_DEFINED__
+struct outlet_t;
+typedef  struct outlet_t  outlet_t;
+#endif //__OUTLET_T_DEFINED__
+
 #include "netfe.h"
 
 #define PB_DEFAULT		3

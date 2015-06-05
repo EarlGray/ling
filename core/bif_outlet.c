@@ -275,6 +275,7 @@ static void status_cb(struct netif *netif)
 
 term_t cbif_setup4(proc_t *proc, term_t *regs)
 {
+#ifndef LING_PIC32
 	term_t IpAddr = regs[0];
 	term_t NetMask = regs[1];
 	term_t Gateway = regs[2];
@@ -322,6 +323,9 @@ term_t cbif_setup4(proc_t *proc, term_t *regs)
 				&net_mask,
 				&gateway, Dhcp == A_TRUE, status_cb);
 	return A_TRUE;
+#else
+    return A_FALSE;
+#endif
 }
 
 //EOF

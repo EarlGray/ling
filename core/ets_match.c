@@ -214,12 +214,13 @@ static match_exp_t *compile_exp2(term_t exp, comp_info_t *ci);
 term_t ets_match_spec_run(ets_match_spec_t *mspec,
 		term_t *elts, int arity, term_t pid, heap_t *hp)
 {
+	int i;
 	while (mspec != 0)
 	{
 		term_t vars[mspec->nr_vars];
 		term_t mvars[mspec->nr_vars];
 
-		for (int i = 0; i < mspec->nr_vars; i++)
+		for (i = 0; i < mspec->nr_vars; i++)
 		{
 			vars[i] = noval;
 			mvars[i] = noval;
@@ -342,6 +343,7 @@ static int match_head(match_pat_t *pat, term_t *val, int nv, term_t *vars, heap_
 static term_t eval_match_exp(match_exp_t *exp, eval_ctx_t *ctx, heap_t *hp)
 {
 	assert(exp != 0);
+	int i;
 	switch (exp->op)
 	{
 	case meo_var:
@@ -372,7 +374,7 @@ static term_t eval_match_exp(match_exp_t *exp, eval_ctx_t *ctx, heap_t *hp)
 	case meo_all_bound:
 	{
 		term_t all = nil;
-		for (int i = ctx->nr_vars -1; i >= 0; i--)
+		for (i = ctx->nr_vars -1; i >= 0; i--)
 		{
 			assert(ctx->vars[i] != noval);
 			if (ctx->in_body)
@@ -434,7 +436,7 @@ static term_t eval_match_exp(match_exp_t *exp, eval_ctx_t *ctx, heap_t *hp)
 			return ZERO_TUPLE;
 		term_t new_elts[exp->arity];
 		match_exp_t *elt = exp->elts;
-		for (int i = 0; i < exp->arity; i++)
+		for (i = 0; i < exp->arity; i++)
 		{
 			term_t val = eval_match_exp(elt, ctx, hp);
 			if (val == noval)
@@ -1232,8 +1234,9 @@ static int compile_pattern_top1(term_t top, comp_info_t *ci)
 
 static int compile_pattern1(term_t *elts, int arity, comp_info_t *ci)
 {
+	int i;
 	ci->nr_pats += arity;
-	for (int i = 0; i < arity; i++)
+	for (i = 0; i < arity; i++)
 	{
 		if (compile_pat1(elts[i], ci) < 0)
 			return -BAD_ARG;
@@ -1297,6 +1300,7 @@ static int compile_exp_list1(term_t exps, comp_info_t *ci)
 
 static int compile_exp1(term_t e, comp_info_t *ci)
 {
+	int i;
 tail_rec:
 	ci->nr_exps++;
 	if (is_atom(e))
@@ -1332,7 +1336,7 @@ tail_rec:
 			// double braces; build a tuple
 			p = peel_tuple(p[0]);
 			arity = *p++;
-			for (int i = 0; i < arity; i++)
+			for (i = 0; i < arity; i++)
 				if (compile_exp1(p[i], ci) < 0)
 					return -BAD_ARG;
 		}
@@ -1463,9 +1467,10 @@ static match_pat_t *compile_pattern_top2(term_t top, comp_info_t *ci)
 
 static match_pat_t *compile_pattern2(term_t *elts, int arity, comp_info_t *ci)
 {
+	int i;
 	match_pat_t *match_pat = 0;
 	match_pat_t **mpp = &match_pat;
-	for (int i = 0; i < arity; i++)
+	for (i = 0; i < arity; i++)
 	{
 		match_pat_t *mp = compile_pat2(elts[i], ci);
 		assert(mp != 0);
@@ -1545,6 +1550,7 @@ static match_exp_t *compile_exp_list2(term_t exps, comp_info_t *ci)
 
 static match_exp_t *compile_exp2(term_t exp, comp_info_t *ci)
 {
+	int i;
 	match_exp_t *me = (match_exp_t *)ci->mem;
 	ci->mem = me +1;
 
@@ -1592,7 +1598,7 @@ static match_exp_t *compile_exp2(term_t exp, comp_info_t *ci)
 			//me->elts = 0;
 			me->arity = arity;
 
-			for (int i = arity -1; i >= 0; i--)
+			for (i = arity -1; i >= 0; i--)
 			{
 				match_exp_t *elt = compile_exp2(p[i], ci);
 				elt->next = me->elts;

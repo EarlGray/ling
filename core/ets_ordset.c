@@ -217,6 +217,7 @@ static void ets_ordset_insert(ets_table_t *tab, term_t *elts, int arity)
 
 static void ets_ordset_insert_many(ets_table_t *tab, term_t objs)
 {
+	int i;
 	ets_ordset_data_t *data = tab->data;
 	assert(is_list(objs));
 	int count = list_len(objs);
@@ -253,7 +254,7 @@ static void ets_ordset_insert_many(ets_table_t *tab, term_t objs)
 		if (new_elts == 0)
 		{
 			// rollback allocations
-			for (int i = 0; i < num_marsh; i++)
+			for (i = 0; i < num_marsh; i++)
 			{
 				tab->total_alloc -= ALLOC_WSIZE(my_objects[i].elts);
 				ets_free(my_objects[i].elts);
@@ -718,6 +719,7 @@ static int delete_by_key(ordset_twig_t **ref,
 static int delete_object(ordset_twig_t **ref,
 				term_t *elts, int arity, ets_table_t *tab)
 {
+	int i;
 	ets_ordset_data_t *data = tab->data;
 	ordset_twig_t *twig = *ref;
 	if (twig == 0)
@@ -750,7 +752,7 @@ static int delete_object(ordset_twig_t **ref,
 		if (twig->arity != arity)
 			return NO_MATCH;
 
-		for (int i = 0; i < arity; i++)
+		for (i = 0; i < arity; i++)
 			if (i != key_pos -1 && twig->elts[i] != elts[i] &&
 							!are_terms_equal(twig->elts[i], elts[i], 1))	// =:=
 				return NO_MATCH;

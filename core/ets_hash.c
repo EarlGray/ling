@@ -228,8 +228,9 @@ static ets_hash_entry_t *find_matching_entry(ets_hash_entry_t *ent, term_t *elts
 	{
 		if (ent->arity == arity)
 		{
+			int i;
 			int match = 1;
-			for (int i = 0; i < arity; i++)
+			for (i = 0; i < arity; i++)
 			{
 				if (ent->elts[i] != elts[i] &&
 						!are_terms_equal(ent->elts[i], elts[i], 1))	// =:=
@@ -384,6 +385,7 @@ static void ets_hash_insert(ets_table_t *tab, term_t *elts, int arity)
 
 static void ets_hash_insert_many(ets_table_t *tab, term_t objs)
 {
+	int i;
 	ets_hash_data_t *data = tab->data;
 	int count = list_len(objs);
 	assert(count >= 0);
@@ -428,7 +430,7 @@ static void ets_hash_insert_many(ets_table_t *tab, term_t objs)
 		if (new_elts == 0)
 		{
 			// undo allocations before raising an exception
-			for (int i = 0; i < num_marsh; i++)
+			for (i = 0; i < num_marsh; i++)
 			{
 				tab->total_alloc -= ALLOC_WSIZE(my_objects[i].elts);
 				ets_free(my_objects[i].elts);
@@ -581,8 +583,9 @@ static term_t ets_hash_member(ets_table_t *tab, term_t key)
 
 static term_t ets_hash_first(ets_table_t *tab, heap_t *hp)
 {
+	int i;
 	ets_hash_data_t *data = tab->data;
-	for (int i = 0; i < data->nr_buckets; i++)
+	for (i = 0; i < data->nr_buckets; i++)
 	{
 		ets_hash_entry_t *ent = data->buckets[i];
 		while (ent != 0)
@@ -743,6 +746,7 @@ static void ets_hash_delete(ets_table_t *tab, term_t key)
 
 static void ets_hash_delete_object(ets_table_t *tab, term_t *elts, int arity)
 {
+	int i;
 	ets_hash_data_t *data = tab->data;
 
 	int key_pos = tab->key_pos;
@@ -790,7 +794,7 @@ static void ets_hash_delete_object(ets_table_t *tab, term_t *elts, int arity)
 		{
 			term_t *other_elts = (*tee)->elts;
 			int match = 1;
-			for (int i = 0; i < arity; i++)
+			for (i = 0; i < arity; i++)
 			{
 				if (i != key_pos -1 && elts[i] != other_elts[i]
 						&& !are_terms_equal(elts[i], other_elts[i], 1))		// =:=
