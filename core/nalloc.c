@@ -98,7 +98,7 @@ int nalloc_freed_pages()
 static memnode_t *nalloc_internal(int size)
 {
 	assert(size > 0);
-	printk("nalloc(%d)\n", size);
+	//printk("nalloc(%d)\n", size);
 
 	// ext_size accomodates both the client memory and the memnode_t structure
 	// itself aligned to NBOUND

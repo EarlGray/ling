@@ -60,6 +60,8 @@
       <itemPath>../../../include/monitors.h</itemPath>
       <itemPath>../../../include/decode.h</itemPath>
       <itemPath>../../../include/event.h</itemPath>
+      <itemPath>../../../include/map_util.h</itemPath>
+      <itemPath>../../../include/wait_list.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -139,6 +141,12 @@
       <itemPath>../../../ol_console.c</itemPath>
       <itemPath>../event.c</itemPath>
       <itemPath>../../../scheduler.c</itemPath>
+      <itemPath>../../../bif_map.c</itemPath>
+      <itemPath>../../../bif_ling.c</itemPath>
+      <itemPath>../../../wait_list.c</itemPath>
+      <itemPath>../../../proc_queue.c</itemPath>
+      <itemPath>../../../bif_hash.c</itemPath>
+      <itemPath>../../../map_util.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -244,7 +252,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="0xa000"/>
+        <property key="heap-size" value="0x1000"/>
         <property key="input-libraries" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
@@ -441,7 +449,7 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
-        <appendMe value="-I../include -I../../../include -I../../../bignum -DLING_VER=0.3.2 -DLING_PIC32=1"/>
+        <appendMe value="-I../include -I../../../include -I../../../bignum -DLING_VER=0.3.2 -DLING_PIC32=1 -DLING_WITHOUT_LWIP -DLING_WITHOUT_NETTLE"/>
       </C32Global>
       <Simulator>
         <property key="codecoverage.enabled" value="Disable"/>

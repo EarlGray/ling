@@ -46,63 +46,7 @@
 #include "hash.h"
 #include "limits.h"
 
-#ifndef LING_PIC32
 #include "code_base.inc"
-#else
-export_t preloaded_exports[] = {};
-#define NUM_PRE_EXPS 0
-#define NUM_BIF_EXPS 0
-
-fun_entry_t premod_console_funs[] = {};
-line_info_t premod_console_line_refs[] = {};
-term_t  premod_console_file_names[] = {};
-
-uint8_t premod_console_strings[] = "";
-
-fun_entry_t premod_erl_prim_loader_funs[] = {};
-line_info_t premod_erl_prim_loader_line_refs[] = {};
-
-term_t  premod_erl_prim_loader_file_names[] = {};
-uint8_t premod_erl_prim_loader_strings[] = "";
-
-fun_entry_t premod_erlang_funs[] = {};
-
-line_info_t premod_erlang_line_refs[] = {};
-term_t  premod_erlang_file_names[] = {};
-
-uint8_t premod_erlang_strings[] = "FOR1INGEAM";
-
-fun_entry_t premod_error_handler_funs[] = {}; 
-line_info_t premod_error_handler_line_refs[] = {};
-
-term_t  premod_error_handler_file_names[] = {
-	A_FUNNY1298,
-};
-
-uint8_t premod_error_handler_strings[] = "";
-
-fun_entry_t premod_init_funs[] = {};
-line_info_t premod_init_line_refs[] = {};
-
-term_t  premod_init_file_names[] = {
-	A_FUNNY1299,
-};
-
-uint8_t premod_init_strings[] = "\x2d""traalun";
-
-fun_entry_t premod_prim_inet_funs[] = {};
-line_info_t premod_prim_inet_line_refs[] = {};
-
-term_t  premod_prim_inet_file_names[] = {
-	A_FUNNY1300,
-};
-
-uint8_t premod_prim_inet_strings[] = "\x16""\x00""\x00""\x00""\x03""";
-
-module_info_t preloaded_modules[] = {};
-
-#define NUM_PRE_MODS 6
-#endif
 
 static hash_t *exports_map;
 static hash_t *modules_map;

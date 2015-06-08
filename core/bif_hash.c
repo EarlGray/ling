@@ -39,6 +39,7 @@
 
 #define MD5_CONTEXT_SIZE	92
 
+#ifndef LING_PIC32
 //TODO
 //
 // encode_md5_context, decode_md5_context, and update_md5_context functions is
@@ -162,6 +163,7 @@ static int update_md5_context(term_t IoData, struct md5_ctx *ctx)
 
 	return 0;
 }
+#endif
 
 term_t cbif_hash2(proc_t *proc, term_t *regs)
 {
@@ -223,6 +225,7 @@ term_t cbif_phash2_2(proc_t *proc, term_t *regs)
 	return int_to_term(h, &proc->hp);
 }
 
+#ifndef LING_PIC32
 term_t cbif_md5_1(proc_t *proc, term_t *regs)
 {
 	term_t Data = regs[0];
@@ -287,6 +290,7 @@ term_t cbif_md5_final1(proc_t *proc, term_t *regs)
 
 	return bin;
 }
+#endif
 
 term_t cbif_crc32_2(proc_t *proc, term_t *regs)
 {

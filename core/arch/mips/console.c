@@ -25,6 +25,10 @@ int console_write(char *buf, int len) {
     printk(buf);
 }
 
+int console_do_pending(void) {
+    return 0;
+}
+
 void console_attach(outlet_t *ol) {
 	if (the_console.attached_outlet != 0)
 		printk("%ptWARNING: steals control over console from %pt\n",

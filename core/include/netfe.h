@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "ling_common.h"
 #include "lwip/netif.h"
 
 #define ETH_MTU		1500

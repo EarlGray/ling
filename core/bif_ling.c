@@ -195,8 +195,12 @@ term_t cbif_experimental2(proc_t *proc, term_t *regs)
 
 term_t cbif_stats0(proc_t *proc, term_t *regs)
 {
+#ifndef LING_WITHOUT_LWIP
 	stats_display();
 	return A_OK;
+#else
+    bif_not_implemented();
+#endif
 }
 
 //EOF
