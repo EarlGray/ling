@@ -366,6 +366,7 @@ init_done:
 #ifdef TRACE_HARNESS
 if (unlikely(trace_mask & TRACE_MASK_CALL))
 {
+	int i;
 	uint32_t *fi = backstep_to_func_info(ip);
 	int disp = ip-fi;
 	if (fi != 0)
@@ -376,7 +377,7 @@ if (unlikely(trace_mask & TRACE_MASK_CALL))
 			{
 				printk("TRACE: %pt:%pt(", T(fi[1]), T(fi[2]));
 				int arity = fi[3];
-				for (int i = 0; i < arity; i++)
+				for (i = 0; i < arity; i++)
 					printk("%pt%s", T(rs[i]), (i < arity-1) ?", " :"");
 				printk(")\n");
 			}
@@ -566,7 +567,8 @@ uint32_t *backstep_to_func_info(uint32_t *p)
 
 opcode_info_t *opcode_lookup(void *label)
 {
-	for (int i = 0; i < <% i2l(length(Variants)) %>; i++)
+	int i;
+	for (i = 0; i < <% i2l(length(Variants)) %>; i++)
 		if (ling_opcodes[i].label == label)
 			return ling_opcodes + i;
 	return 0;
@@ -582,8 +584,9 @@ opcode_info_t *opcode_get(uint32_t n)
 #ifdef EXP_COUNT_IOPS
 void print_iop_counters(void)
 {
+	int i;
 	printk("\n================ iop counters ====================\n");
-	for (int i = 0; i < <% i2l(length(Variants)) %>; i++)
+	for (i = 0; i < <% i2l(length(Variants)) %>; i++)
 	{
 		opcode_info_t *oi = &ling_opcodes[i];
 		printk("%12ld %s\n", oi->counter, oi->var_name);
@@ -678,6 +681,7 @@ static term_t get_stack_trace(uint32_t *ip, uint32_t *cp,
 			term_t *sp, term_t *sbot, mfa_t *first_mfa, term_t args0, heap_t *hp)
 {
 	term_t trace[max_backtrace_depth];
+	int i;
 	int ntrace = 0;
 
 	if (first_mfa != 0)
@@ -774,7 +778,7 @@ static term_t get_stack_trace(uint32_t *ip, uint32_t *cp,
 	uint32_t *cons = heap_alloc_N(hp, ntrace *2);
 	if (cons == 0)
 		return nil;
-	for (int i = ntrace-1; i >= 0; i--)
+	for (i = ntrace-1; i >= 0; i--)
 	{
 		cons[0] = trace[i];
 		cons[1] = tail;
@@ -1717,10 +1721,11 @@ else
 		proc->stack_trace = rs[2];
 	else
 	{
+		int i;
 		// truncate the stack trace to max_backtrace_depth
 		term_t t = rs[2];
 		term_t trace[max_backtrace_depth];
-		for (int i = 0; i < max_backtrace_depth; i++)
+		for (i = 0; i < max_backtrace_depth; i++)
 		{
 			term_t *cons = peel_cons(t);
 			trace[i] = cons[0];

@@ -3,17 +3,19 @@
 
 uint64_t start_of_day_wall_clock = 0;
 
+uint64_t fake_clock = 1234567890;
+
 void time_init(void) {}
 
 #warning "TODO: time.h"
 uint64_t monotonic_clock(void) {
-    printf("TODO: monotonic_clock()");
-    return 0;
+	fake_clock += 1000000;
+    return fake_clock;
 }
 
 uint64_t wall_clock(void) {
-    printf("TODO: wall_clock()");
-    return 0;
+	fake_clock += 1000000;
+    return fake_clock;
 }
 
 void expand_time(struct time_exp_t *xt, uint64_t wall_clock) {

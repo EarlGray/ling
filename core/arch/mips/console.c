@@ -1,7 +1,33 @@
 #include <stdbool.h>
+#include <string.h>
 
 #include "ling_common.h"
 #include "outlet.h"
+
+#define RINGBUFSZ 2048
+struct {
+    unsigned start;
+    char buf[RINGBUFSZ];
+} ringbuf = {
+    .start = 0,
+};
+
+void ringbuf_append(const char *buf, size_t len) {
+    if (ringbuf.start == RINGBUFSZ)
+        ringbuf.start = 0;
+    if ((ringbuf.start + len) <= RINGBUFSZ) {
+        memcpy(ringbuf.buf + ringbuf.start, buf, len);
+        ringbuf.start += len;
+    } else {
+        size_t chunk_len = RINGBUFSZ - ringbuf.start;
+
+        memcpy(ringbuf.buf + ringbuf.start, buf, chunk_len);
+        ringbuf.start = 0;
+
+        ringbuf_append(buf + chunk_len, len - chunk_len);
+    }
+}
+
 
 static struct {
     bool is_initialized;
@@ -43,9 +69,9 @@ void console_detach(outlet_t *ol) {
 
 int ser_cons_write(char *buf, int len)
 {
+    ringbuf_append(buf, len);
 #if defined(__ENABLEIO_STARTERKIT_DEBUG)
-    if (!the_console.is_initialized) return -1;
-    db_puts(buf, len);
+    //db_puts(buf, len);
 #else
 # warning "No ser_cons_write! printk() is disabled"
 #endif

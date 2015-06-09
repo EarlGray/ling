@@ -1116,7 +1116,7 @@ static int snprintf_flush(vformatter_buff_t *vbuff)
 }
 
 
-int snprintf(char *buf, size_t len, const char *format, ...)
+int ling_snprintf(char *buf, size_t len, const char *format, ...)
 {
     int cc;
     va_list ap;
@@ -1147,7 +1147,7 @@ int snprintf(char *buf, size_t len, const char *format, ...)
 }
 
 
-int vsnprintf(char *buf, size_t len, const char *format,
+int ling_vsnprintf(char *buf, size_t len, const char *format,
                                va_list ap)
 {
     int cc;

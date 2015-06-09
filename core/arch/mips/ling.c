@@ -102,9 +102,9 @@ int main() {
 
     atoms_init();
     //embed_init();
-    //code_base_init();
-    //scheduler_init();
-    //ets_init();
+    code_base_init();
+    scheduler_init();
+    ets_init();
     //pcre_init();
     counters_init();
 
@@ -117,10 +117,10 @@ int main() {
 
     printk("\r\nLing %s is here\r\n", quote_and_expand(LING_VER));
 
-    //proc_main(0); // preliminary run
+    proc_main(0); // preliminary run
 
-    //static char *hardcoded_command_line = "-home /";
-    //spawn_init_start(hardcoded_command_line);
+    static char *hardcoded_command_line = "-home /";
+    spawn_init_start(hardcoded_command_line);
 
     /* (UN)REACHABLE */
     nalloc_dump_stats();
@@ -134,7 +134,7 @@ void printk(const char *fmt, ...)
 
     va_list ap;
     va_start(ap, fmt);
-    vsnprintf(buffer, sizeof(buffer), fmt, ap);
+    ling_vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
 
 	int len = strlen(buffer);
@@ -170,69 +170,69 @@ void __assert_fail(const char *assertion,
 	fatal_error("assertion %s failed at %s:%d (%s)", assertion, file, line, function);
 }
 
-//static term_t parse_cmd_line(heap_t *hp, char *cmd_line)
-//{
-//	term_t args = nil;
-//	char *p = cmd_line;
-//	while (*p != 0)
-//	{
-//		while (*p == ' ')
-//			p++;
-//		char *token1, *token2;
-//		if (*p == '\'' || *p == '"')
-//		{
-//			int8_t quote = *p++;
-//			token1 = p;
-//			while (*p != 0 && *p != quote)
-//				p++;
-//			token2 = p;
-//			if (*p != 0)
-//				p++;
-//		}
-//		else
-//		{
-//			token1 = p;
-//			while (*p != 0 && *p != ' ')
-//				p++;
-//			token2 = p;
-//		}
-//		uint8_t *data;
-//		term_t bin = heap_make_bin(hp, token2 -token1, &data);
-//		memcpy(data, token1, token2 -token1);
-//		args = heap_cons(hp, bin, args);
-//	}
-//
-//	return list_rev(args, hp);
-//}
+static term_t parse_cmd_line(heap_t *hp, char *cmd_line)
+{
+	term_t args = nil;
+	char *p = cmd_line;
+	while (*p != 0)
+	{
+		while (*p == ' ')
+			p++;
+		char *token1, *token2;
+		if (*p == '\'' || *p == '"')
+		{
+			int8_t quote = *p++;
+			token1 = p;
+			while (*p != 0 && *p != quote)
+				p++;
+			token2 = p;
+			if (*p != 0)
+				p++;
+		}
+		else
+		{
+			token1 = p;
+			while (*p != 0 && *p != ' ')
+				p++;
+			token2 = p;
+		}
+		uint8_t *data;
+		term_t bin = heap_make_bin(hp, token2 -token1, &data);
+		memcpy(data, token1, token2 -token1);
+		args = heap_cons(hp, bin, args);
+	}
 
-//static void spawn_init_start(char *cmd_line)
-//{
-//	proc_t *init_proc = proc_make(noval);	// group leader set later
-//	assert(init_proc != 0);
-//
-//	init_proc->cap.regs[0] = parse_cmd_line(&init_proc->hp, cmd_line);
-//	assert(init_proc->cap.regs[0] != noval);
-//	init_proc->cap.live = 1;
-//
-//	init_proc->init_call_mod = A_INIT;
-//	init_proc->init_call_func = A_BOOT;
-//	init_proc->init_call_arity = 1;
-//
-//	export_t *exp = code_base_lookup(A_INIT, A_BOOT, 1);
-//	assert(exp != 0);
-//
-//	init_proc->cap.ip = exp->entry;
-//	module_info_t *mi = code_base_module_by_name(A_INIT, 0);
-//	assert(mi != 0);
-//	init_proc->cap.cp = mi->code_starts + mi->code_size-1;
-//
-//	scheduler_enlist0(init_proc);	// pid assigned
-//	init_proc->group_leader = init_proc->pid;	// init is its own leader
-//
-//	proc_main(init_proc);
-//
-//	/* UNREACHANBLE */
-//}
+	return list_rev(args, hp);
+}
+
+static void spawn_init_start(char *cmd_line)
+{
+	proc_t *init_proc = proc_make(noval);	// group leader set later
+	assert(init_proc != 0);
+
+	init_proc->cap.regs[0] = parse_cmd_line(&init_proc->hp, cmd_line);
+	assert(init_proc->cap.regs[0] != noval);
+	init_proc->cap.live = 1;
+
+	init_proc->init_call_mod = A_INIT;
+	init_proc->init_call_func = A_HELLO;
+	init_proc->init_call_arity = 1;
+
+	export_t *exp = code_base_lookup(A_INIT, A_HELLO, 1);
+	assert(exp != 0);
+
+	init_proc->cap.ip = exp->entry;
+	module_info_t *mi = code_base_module_by_name(A_INIT, 0);
+	assert(mi != 0);
+	init_proc->cap.cp = mi->code_starts + mi->code_size-1;
+
+	scheduler_enlist0(init_proc);	// pid assigned
+	init_proc->group_leader = init_proc->pid;	// init is its own leader
+
+	proc_main(init_proc);
+
+	/* UNREACHANBLE */
+}
 
 void abort(void)
 {

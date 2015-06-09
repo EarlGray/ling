@@ -53,7 +53,7 @@
 
 -export([restart/0,reboot/0,stop/0,stop/1,
 	 get_status/0,boot/1,get_arguments/0,get_plain_arguments/0,
-	 get_argument/1,script_id/0]).
+	 get_argument/1,script_id/0,hello/1]).
 
 %% for the on_load functionality; not for general use
 -export([run_on_load_handlers/0]).
@@ -168,6 +168,7 @@ stop(Status) -> init ! {stop,{stop,Status}}, ok.
 -spec boot(BootArgs) -> no_return() when
       BootArgs :: [binary()].
 boot(BootArgs) ->
+    hello(BootArgs),
 
 	%%MK
 	erlang:statistics(wall_clock),
@@ -1554,3 +1555,5 @@ run_on_load_handlers() -> ok.
 %% 	    end
 %%     end;
 %% run_on_load_handlers([], _) -> ok.
+
+hello(Args) -> erlang:display('HELLO WORLD'), erlang:display(Args).

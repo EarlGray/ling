@@ -24,8 +24,10 @@ void *mm_alloc_pages(int nr_pages)
 		return 0;
 	void *allocated = free_page;
 	free_page += nr_pages * PAGE_SIZE;
+    /*
 	printk("mm_alloc_pages(%d) -> *%08x: %d pages left, free_page=*%08x\n",
 	       nr_pages, allocated, mm_alloc_left(), (uintptr_t)free_page);
+    // */
 	return allocated;
 }
 
