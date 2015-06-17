@@ -1556,7 +1556,7 @@ run_on_load_handlers() -> ok.
 %%     end;
 %% run_on_load_handlers([], _) -> ok.
 
-hello(Args) ->
+hello(_) ->
     erlang:display('HELLO WORLD'),
-    erlang:display(Args),
+    erlang:display(primes:up_to(20)),
     erlang:halt().

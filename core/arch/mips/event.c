@@ -27,11 +27,13 @@ int _general_exception_handler(void)
     _excep_code = (_excep_code & 0x0000007C) >> 2;
     
     while (1) {
-        
+        asm volatile ("wait");
     }
 }
 
 int _bev_exception()
 {
-    while (1);
+    while (1) {
+        asm volatile ("wait");
+    };
 }
