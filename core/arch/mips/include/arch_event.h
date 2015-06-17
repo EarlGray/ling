@@ -1,0 +1,4 @@
+#ifndef __LING_MIPS_ARCH_EVENT_H__
+#define __LING_MIPS_ARCH_EVENT_H__
+
+#endif //__LING_MIPS_ARCH_EVENT_H__

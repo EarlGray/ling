@@ -3,6 +3,9 @@
 
 #include "ling_common.h"
 #include "outlet.h"
+#include "uart.h"
+
+#define CONSOLE_UART  1
 
 #define RINGBUFSZ 2048
 struct {
@@ -40,6 +43,10 @@ static struct {
 void console_init()
 {
     DBINIT();
+    int ret = uart_init(CONSOLE_UART);
+    if (ret) {
+        printk("barf\n");
+    }
     the_console.is_initialized = true;
 }
 
@@ -69,11 +76,10 @@ void console_detach(outlet_t *ol) {
 
 int ser_cons_write(char *buf, int len)
 {
+    if (!the_console.is_initialized)
+        return -1;
+
     ringbuf_append(buf, len);
-#if defined(__ENABLEIO_STARTERKIT_DEBUG)
-    //db_puts(buf, len);
-#else
-# warning "No ser_cons_write! printk() is disabled"
-#endif
+    uart_puts(CONSOLE_UART, buf, len);
     return 0;
 }
