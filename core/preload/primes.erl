@@ -1,5 +1,4 @@
 -module(primes).
--compile(export_all).
 -export([up_to/1, exclude/3]).
 
 %%
@@ -26,18 +25,13 @@ dropwhile(Pred, [Hd|Tail]=Rest) ->
 dropwhile(Pred, []) when is_function(Pred, 1) -> [].
 
 
-%
-% helper routine
-%
+%%
+%%    Prime numbers!
+%%
 exclude(_, _, []) -> [];
 exclude(N, By, [H | T]) when N == H -> exclude(By + N, By, T);
 exclude(N, By, [H | T]) when H < N -> [H | exclude(N, By, T)];
 exclude(N, By, [H | T]) -> [H | exclude(N + By, By, T)].
-
-
-%%
-%% interface
-%%
 
 sieve(Lst, P) ->
   Lst1 = exclude(P + P, P, Lst),

@@ -168,8 +168,6 @@ stop(Status) -> init ! {stop,{stop,Status}}, ok.
 -spec boot(BootArgs) -> no_return() when
       BootArgs :: [binary()].
 boot(BootArgs) ->
-    hello(BootArgs),
-
 	%%MK
 	erlang:statistics(wall_clock),
 	%%
@@ -188,6 +186,12 @@ boot(BootArgs) ->
     Start = map(fun prepare_run_args/1, Start0),
     Flags0 = flags_to_atoms_again(Flags),
     boot(Start,Flags0,Args).
+
+
+hello(_) ->
+    erlang:display('HELLO WORLD'),
+    erlang:display(primes:up_to(100)),
+    erlang:halt().
 
 prepare_run_args({eval, [Expr]}) ->
     {eval,Expr};
@@ -1497,66 +1501,3 @@ archive_extension() ->
 
 run_on_load_handlers() -> ok.
 
-%% run_on_load_handlers() ->
-%%     Ref = monitor(process, ?ON_LOAD_HANDLER),
-%%     catch ?ON_LOAD_HANDLER ! run_on_load,
-%%     receive
-%% 	{'DOWN',Ref,process,_,noproc} ->
-%% 	    %% There is no on_load handler process,
-%% 	    %% probably because init:restart/0 has been
-%% 	    %% called and it is not the first time we
-%% 	    %% pass through here.
-%% 	    ok;
-%% 	{'DOWN',Ref,process,_,on_load_done} ->
-%% 	    ok;
-%% 	{'DOWN',Ref,process,_,Res} ->
-%% 	    %% Failure to run an on_load handler.
-%% 	    %% This is fatal during start-up.
-%% 	    exit(Res)
-%%     end.
-%% 
-%% start_on_load_handler_process() ->
-%%     register(?ON_LOAD_HANDLER,
-%% 	     spawn(fun on_load_handler_init/0)).
-%% 
-%% on_load_handler_init() ->
-%%     on_load_loop([], false).
-%% 
-%% on_load_loop(Mods, Debug0) ->
-%%     receive
-%% 	{init_debug_flag,Debug} ->
-%% 	    on_load_loop(Mods, Debug);
-%% 	{loaded,Mod} ->
-%% 	    on_load_loop([Mod|Mods], Debug0);
-%% 	run_on_load ->
-%% 	    run_on_load_handlers(Mods, Debug0),
-%% 	    exit(on_load_done)
-%%     end.
-%% 
-%% run_on_load_handlers([M|Ms], Debug) ->
-%%     debug(Debug, {running_on_load_handler,M}),
-%%     Fun = fun() ->
-%% 		  Res = erlang:call_on_load_function(M),
-%% 		  exit(Res)
-%% 	  end,
-%%     {Pid,Ref} = spawn_monitor(Fun),
-%%     receive
-%% 	{'DOWN',Ref,process,Pid,OnLoadRes} ->
-%% 	    Keep = OnLoadRes =:= ok,
-%% 	    erlang:finish_after_on_load(M, Keep),
-%% 	    case Keep of
-%% 		false ->
-%% 		    Error = {on_load_function_failed,M},
-%% 		    debug(Debug, Error),
-%% 		    exit(Error);
-%% 		true ->
-%% 		    debug(Debug, {on_load_handler_returned_ok,M}),
-%% 		    run_on_load_handlers(Ms, Debug)
-%% 	    end
-%%     end;
-%% run_on_load_handlers([], _) -> ok.
-
-hello(_) ->
-    erlang:display('HELLO WORLD'),
-    erlang:display(primes:up_to(20)),
-    erlang:halt().
