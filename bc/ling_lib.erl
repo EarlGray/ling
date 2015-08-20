@@ -33,7 +33,7 @@
 
 -module(ling_lib).
 -export([abstract_code/1]).
--export([specs_to_binary/1]).
+-export([specs_to_binary/1, binary_to_specs/2]).
 
 -include("ling_code.hrl").
 
@@ -143,6 +143,85 @@ specs_to_binary(Specs) ->	%% {ok,Bin}
 
 	<<"FOR1",FormSize:32,"LING",Chunks/binary>>.
 
+consume_chunk(<<>>, Mod) -> Mod;
+consume_chunk(<<Caption:4/binary, ChunkSize:32, Rest0/binary>>, Mod) ->
+	AlignedSize = (ChunkSize + 3) band (bnot 3),
+	PadSize = AlignedSize - ChunkSize,
+	<<Body:ChunkSize/binary, _:PadSize/binary, Rest/binary>> = Rest0,
+	case Caption of
+	<<"Atom">> ->
+		<<AtomsCount:32, AtomsBin/binary>> = Body,
+		ReadAtoms =
+			fun(_Self, <<>>, Atoms) -> lists:reverse(Atoms);
+		       (Self, <<Len, Atom:Len/binary, Bin/binary>>, Atoms) ->
+			   	Self(Self, Bin, [ binary_to_list(Atom) | Atoms ])
+			end,
+		Atoms = ReadAtoms(ReadAtoms, AtomsBin, []),
+		AtomsCount = length(Atoms),
+		consume_chunk(Rest, Mod#m{atoms=Atoms});
+	<<"ExpT">> ->
+		<<ExpCount:32, ExpBin/binary>> = Body,
+		Atoms = Mod#m.atoms, true = is_list(Atoms),
+		ReadExports =
+			fun(_Self, <<>>, Exps) -> lists:reverse(Exps);
+			   (Self, <<AtomInd:32, N:32, Off:32, Bin/binary>>, Exps) ->
+				F = lists:nth(AtomInd + 1, Atoms),
+				Self(Self, Bin, [{F, N, Off} | Exps])
+			end,
+		Exports = ReadExports(ReadExports, ExpBin, []),
+		ExpCount = length(Exports),
+		consume_chunk(Rest, Mod#m{exports=Exports});
+	<<"ImpT">> ->
+		<<ImpCount:32, ImpBin/binary>> = Body,
+		Atoms = Mod#m.atoms, true = is_list(Atoms),
+		ReadImports =
+			fun(_Self, <<>>, Imps) -> lists:reverse(Imps);
+			   (Self, <<ModInd:32, FunInd:32, A:32, Bin/binary>>, Imps) ->
+				M = lists:nth(ModInd + 1, Atoms),
+				F = lists:nth(FunInd + 1, Atoms),
+				Self(Self, Bin, [{M, F, A} | Imps])
+			end,
+		Imports = ReadImports(ReadImports, ImpBin, []),
+		ImpCount = length(Imports),
+		consume_chunk(Rest, Mod#m{imports=Imports});
+	<<"Code">> ->
+		<<CodeSize:32, CodeBin/binary>> = Body,
+		CodeSeq = dec(CodeBin, []),
+		CodeSize = length(CodeSeq),
+		Code = CodeSeq, %% Actually, Code is a list of parts of CodeSeq
+		consume_chunk(Rest, Mod#m{code=Code});
+	<<"FunT">> ->
+		<<LambdaCount:32, LambdaBin/binary>> = Body,
+		Atoms = Mod#m.atoms, true = is_list(Atoms),
+		ReadLambdas =
+			fun(_Self, <<>>, Acc) -> lists:reverse(Acc);
+			   (Self, <<FunInd:32, A:32, Off:32, Idx:32, NFree:32, Ou:32, Bin/binary>>, Acc) ->
+				Fun = lists:nth(FunInd + 1, Atoms),
+				Self(Self, Bin, [{Fun, A, Off, Idx, NFree, Ou} | Acc])
+			end,
+		Lambdas = ReadLambdas(ReadLambdas, LambdaBin, []),
+		LambdaCount = length(Lambdas),
+		consume_chunk(Rest, Mod#m{lambdas=Lambdas});
+	<<"LitT">> ->
+		<<LitCount:32, LitBin/binary>> = Body,
+		ReadLit =
+			fun(_Self, <<>>, Acc) -> lists:reverse(Acc);
+			   (Self, <<LitLen:32, EncLit:LitLen/binary, Bin/binary>>, Acc) ->
+				Self(Self, Bin, [binary_to_term(EncLit) | Acc])
+			end,
+		Lits = ReadLit(ReadLit, LitBin, []),
+		LitCount = length(Lits),
+		consume_chunk(Rest, Mod#m{literals=Lits});
+	<<"StrT">> ->
+		consume_chunk(Rest, Mod#m{strings=Body});
+	_ ->
+		io:format("Section '~s' is not recognized\n", [binary_to_list(Caption)]),
+		consume_chunk(Rest, Mod)
+	end.
+
+binary_to_specs(<<"FOR1",_FormSize:32,"LING",Chunks/binary>>, ModName) ->
+	consume_chunk(Chunks, #m{mod_name=ModName}).
+
 wrap(_, undefined) ->
 	<<>>;
 wrap([A,B,C,D], Body) ->
@@ -229,6 +308,72 @@ ai(A, [_|As], I) ->
 
 encode(Specs) ->
 	list_to_binary([enc(S) || S <- lists:concat(Specs)]).
+
+dec(<<>>, Ops) -> lists:reverse(Ops);
+dec(<<0:1,N:7,Rest/binary>>, Ops) ->
+	dec(Rest, [{opcode,N} | Ops]);
+dec(<<58:6,N:10, Rest/binary>>, Ops) ->
+	dec(Rest, [{opcode,N} | Ops]);
+dec(<<255,9, N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{opcode,N} | Ops]);
+dec(<<8:4,X:4, Rest/binary>>, Ops) ->
+	dec(Rest, [{reg_as_term,X} | Ops]);
+dec(<<250, X, Rest/binary>>, Ops) ->
+	dec(Rest, [{reg_as_term,X} | Ops]);
+dec(<<9:4,Y:4, Rest/binary>>, Ops) ->
+	dec(Rest, [{slot_as_term, Y} | Ops]);
+dec(<<251, Y, Rest/binary>>, Ops) ->
+	dec(Rest, [{slot_as_term, Y} | Ops]);
+dec(<<255,8,Y:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{slot_as_term, Y} | Ops]);
+dec(<<10:4,N:12, Rest/binary>>, Ops) ->
+	dec(Rest, [N | Ops]);
+dec(<<11:4,N:20, Rest/binary>>, Ops) ->
+	dec(Rest, [N | Ops]);
+dec(<<249,N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [N | Ops]);
+dec(<<12:4, N:12, Rest/binary>>, Ops) ->
+	dec(Rest, [{atom, N} | Ops]);
+dec(<<255,1, N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{atom, N} | Ops]);
+dec(<<246, Rest/binary>>, Ops) ->
+	dec(Rest, [{export, none} | Ops]);
+dec(<<13:4,N:12,Rest/binary>>, Ops) ->
+	dec(Rest, [{export, N} | Ops]);
+dec(<<255,2,N:32,Rest/binary>>, Ops) ->
+	dec(Rest, [{export, N} | Ops]);
+dec(<<56:6,N:10,Rest/binary>>, Ops) ->
+	dec(Rest, [{literal, N} | Ops]);
+dec(<<255,3,N:32,Rest/binary>>, Ops) ->
+	dec(Rest, [{literal, N} | Ops]);
+dec(<<57:6, N:10, Rest/binary>>, Ops) ->
+	dec(Rest, [{bif, N} | Ops]);
+dec(<<255,4,N:32,Rest/binary>>, Ops) ->
+	dec(Rest, [{bif, N} | Ops]);
+dec(<<59:6, I:10/signed, Rest/binary>>, Ops) ->
+	dec(Rest, [{tag_int, I} | Ops]);
+dec(<<248, I:32/signed, Rest/binary>>, Ops) ->
+	dec(Rest, [{tag_int, I} | Ops]);
+dec(<<60:6,N:10, Rest/binary>>, Ops) ->
+	dec(Rest, [{fu,N} | Ops]);
+dec(<<255, 5, N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{fu,N} | Ops]);
+dec(<<244,N, Rest/binary>>, Ops) ->
+	dec(Rest, [{'catch', N} | Ops]);
+dec(<<255, 6, N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{'catch', N} | Ops]);
+dec(<<245, N, Rest/binary>>, Ops) ->
+	dec(Rest, [{str,N} | Ops]);
+dec(<<255,7,N:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{str,N} | Ops]);
+dec(<<252, Rest/binary>>, Ops) ->
+	dec(Rest, [nil | Ops]);
+dec(<<253, Rest/binary>>, Ops) ->
+	dec(Rest, [{f,none} | Ops]);
+dec(<<254,O:16, Rest/binary>>, Ops) ->
+	dec(Rest, [{f, O} | Ops]);
+dec(<<255,0,O:32, Rest/binary>>, Ops) ->
+	dec(Rest, [{f, O} | Ops]).
 
 enc({opcode,N}) when N < 128 ->
 	<<0:1,N:7>>;
